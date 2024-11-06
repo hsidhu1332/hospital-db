@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Appointments</title>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <script language="JavaScript">
+        const appointments = [
+            {   
+                appointmentDate: "2024-12-10",
+                appointmentTime: "15:30",
+                reason: "Follow-up check",
+                patientName: "Sarah Estrella",
+                doctorName: "Doug Smith"
+            },
+            {
+                appointmentDate: "2024-11-05",
+                appointmentTime: "10:00",
+                reason: "Annual exam",
+                patientName: "Walter White",
+                doctorName: "Johnny Francis"
+            },
+            {
+                appointmentDate: "2024-10-20",
+                appointmentTime: "15:00",
+                reason: "Sports Physical",
+                patientName: "Thomas Adams",
+                doctorName: "Abe Washington"
+            }
+        ];
+
+        function showForm(action) {
+            document.getElementById('browse').style.display = action === 'browse' || action === 'all' ? 'block' : 'none';
+            document.getElementById('insert').style.display = action === 'insert' || action === 'all' ? 'block' : 'none';
+            document.getElementById('update').style.display = action === 'update' || action === 'all' ? 'block' : 'none';
+            document.getElementById('delete').style.display = action === 'delete' || action === 'all' ? 'block' : 'none';
+        }
+
+        function newAppointment() { showForm('insert'); }
+
+        function updateAppointment(index) {
+            const appointment = appointments[index];
+            populateForm(appointment, 'updateAppointment');
+            showForm('update');
+        }
+
+        function deleteAppointment(index) {
+            const appointment = appointments[index];
+            document.getElementById('deleteAppointmentReason').textContent = appointment.reason;
+            document.getElementById('deleteAppointmentDate').textContent = appointment.appointmentDate;
+            document.getElementById('deletePatientName').textContent = appointment.patientName;
+            document.getElementById('deleteDoctorName').textContent = appointment.doctorName;
+            showForm('delete');
+        }
+
+        function populateForm(data, formId) {
+            Object.keys(data).forEach(key => {
+                const element = document.querySelector(`#${formId} [name="${key}"]`);
+                if (element) element.value = data[key];
+            });
+        }
+    </script>
+</head>
+
+<body onload="showForm('browse')">
+<h1>Appointments</h1>
+
+<nav>
+    <a href="index.html">Home</a>
+    <a href="patients.html">Patients</a>
+    <a href="doctors.html">Doctors</a>
+    <a href="appointments.html">Appointments</a>
+    <a href="medications.html">Medications</a>
+    <a href="pharmacies.html">Pharmacies</a>
+    <a href="patientrecords.html">Patient Records</a>
+</nav>
+
+<div id="browse">
+    <p><a href="#" onclick="showForm('all')">Display all forms</a></p>
+    <table border="1" cellpadding="5">
+        <tr>
+            <th><a href="#" onclick="newAppointment()">New</a></th>
+            <th></th>
+            <th>Appointment Date</th>
+            <th>Appointment Time</th>
+            <th>Reason</th>
+            <th>Patient Name</th>
+            <th>Doctor Name</th>
+        </tr>
+        <script>
+            appointments.forEach((appointment, index) => {
+                document.write(`
+                    <tr>
+                        <td><a href="#" onclick="updateAppointment(${index})">Edit</a></td>
+                        <td><a href="#" onclick="deleteAppointment(${index})">Delete</a></td>
+                        <td>${appointment.appointmentDate}</td>
+                        <td>${appointment.appointmentTime}</td>
+                        <td>${appointment.reason}</td>
+                        <td>${appointment.patientName}</td>
+                        <td>${appointment.doctorName}</td>
+                    </tr>
+                `);
+            });
+        </script>
+    </table>
+</div> <!-- browse -->
+
+<div id="insert" style="display: none;">
+    <form method="POST" id="addAppointment">
+        <legend><strong>Add Appointment</strong></legend>
+        <fieldset class="fields">
+            <label>Date</label> <input type="date" name="appointmentDate">
+            <label>Time</label> <input type="time" name="appointmentTime">
+            <label>Reason</label> <input type="text" name="reason">
+            <label>Patient Name</label> <input type="text" name="patientName">
+            <label>Doctor Name</label> <input type="text" name="doctorName">
+        </fieldset>
+        <input class="btn" type="submit" value="Add Appointment">
+        <input class="btn" type="button" value="Cancel" onclick="showForm('browse')">
+    </form>
+</div> <!-- insert -->
+
+<div id="update" style="display: none;">
+    <form method="POST" id="updateAppointment">
+        <legend><strong>Update Appointment</strong></legend>
+        <fieldset class="fields">
+            <label>Date</label> <input type="date" name="appointmentDate">
+            <label>Time</label> <input type="time" name="appointmentTime">
+            <label>Reason</label> <input type="text" name="reason">
+            <label>Patient Name</label> <input type="text" name="patientName">
+            <label>Doctor Name</label> <input type="text" name="doctorName">
+        </fieldset>
+        <input class="btn" type="submit" value="Save Changes">
+        <input class="btn" type="button" value="Cancel" onclick="showForm('browse')">
+    </form>
+</div> <!-- update -->
+
+<div id="delete" style="display: none;">
+    <form method="POST" id="deleteAppointment">
+        <legend><strong>Delete Appointment</strong></legend>
+        <fieldset class="fields">
+            <p>Are you sure you wish to delete this appointment?</p>
+            <label><strong>Reason:</strong></label> <span id="deleteAppointmentReason"></span><br>
+            <label><strong>Date:</strong></label> <span id="deleteAppointmentDate"></span><br>
+            <label><strong>Patient Name:</strong></label> <span id="deletePatientName"></span><br>
+            <label><strong>Doctor Name:</strong></label> <span id="deleteDoctorName"></span><br>
+        </fieldset>
+        <input class="btn" type="submit" value="Confirm Delete">
+        <input class="btn" type="button" value="Cancel" onclick="showForm('browse')">
+    </form>
+</div> <!-- delete -->
+
+</body>
+</html>

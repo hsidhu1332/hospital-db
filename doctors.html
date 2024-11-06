@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Doctors</title>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <script language="JavaScript">
+        const doctors = [
+            {   
+                id: 1,
+                firstName: "Doug",
+                lastName: "Smith",
+                email: "doug.smith@hospital.com",
+                phone: "320-987-6343",
+                specialty: "Cardiology",
+                license: "DOC154627",
+                location: "Corvallis"
+            },
+            {
+                id: 2,
+                firstName: "Johnny",
+                lastName: "Francis",
+                email: "johnny.francis@hospital.com",
+                phone: "135-142-1561",
+                specialty: "ENT",
+                license: "DOC643254",
+                location: "Corvallis"
+            },
+            {
+                id: 3,
+                firstName: "Abe",
+                lastName: "Washington",
+                email: "abe.washington@hospital.com",
+                phone: "485-451-4414",
+                specialty: "Pediatrics",
+                license: "DOC213675",
+                location: "Corvallis"
+            }
+        ];
+
+        function showform(dowhat) {
+            document.getElementById('browse').style.display = dowhat === 'browse' || dowhat === 'all' ? 'block' : 'none';
+            document.getElementById('insert').style.display = dowhat === 'insert' || dowhat === 'all' ? 'block' : 'none';
+            document.getElementById('update').style.display = dowhat === 'update' || dowhat === 'all' ? 'block' : 'none';
+            document.getElementById('delete').style.display = dowhat === 'delete' || dowhat === 'all' ? 'block' : 'none';
+        }
+
+        function populateForm(data, formId) {
+            Object.keys(data).forEach(key => {
+                const element = document.querySelector(`#${formId} [name="${key}"]`);
+                if (element) element.value = data[key];
+            });
+        }
+
+        function newDoctor() { showform('insert'); }
+
+        function updateDoctor(doctorId) {
+            const doctor = doctors.find(d => d.id === doctorId);
+            if (doctor) {
+                populateForm(doctor, 'updateDoctor');
+                showform('update');
+            }
+        }
+
+        function deleteDoctor(doctorId) {
+            const doctor = doctors.find(d => d.id === doctorId);
+            if (doctor) {
+                document.getElementById('deleteDoctorID').value = doctorId;
+
+                // Populate the spans with doctor data for delete confirmation
+                document.getElementById('deleteFirstName').textContent = doctor.firstName;
+                document.getElementById('deleteLastName').textContent = doctor.lastName;
+                document.getElementById('deleteSpecialty').textContent = doctor.specialty;
+                document.getElementById('deletePhone').textContent = doctor.phone;
+                document.getElementById('deleteLocation').textContent = doctor.location;
+
+                showform('delete');
+            }
+        }
+
+        function browseDoctors() { showform('browse'); }
+        function showAll() { showform('all'); }
+    </script>
+</head>
+
+<body onload="browseDoctors()">
+<h1>Doctors</h1>
+
+<nav>
+    <a href="index.html">Home</a>
+    <a href="patients.html">Patients</a>
+    <a href="doctors.html">Doctors</a>
+    <a href="appointments.html">Appointments</a>
+    <a href="medications.html">Medications</a>
+    <a href="pharmacies.html">Pharmacies</a>
+    <a href="patientrecords.html">Patient Records</a>
+</nav>
+
+<div id="browse">
+    <p><a href="#" onclick="showAll()">Display all forms</a></p>
+    <table border="1" cellpadding="5">
+        <tr>
+            <th><a href="#" onclick="newDoctor()">New</a></th>
+            <th></th>
+            <th>Doctor ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th>Specialty</th>
+            <th>License</th>
+            <th>Location</th>
+        </tr>
+        <script>
+            doctors.forEach(doctor => {
+                document.write(`
+                    <tr>
+                        <td><a href="#" onclick="updateDoctor(${doctor.id})">Edit</a></td>
+                        <td><a href="#" onclick="deleteDoctor(${doctor.id})">Delete</a></td>
+                        <td>${doctor.id}</td>
+                        <td>${doctor.firstName}</td>
+                        <td>${doctor.lastName}</td>
+                        <td>${doctor.email}</td>
+                        <td>${doctor.phone}</td>
+                        <td>${doctor.specialty}</td>
+                        <td>${doctor.license}</td>
+                        <td>${doctor.location}</td>
+                    </tr>
+                `);
+            });
+        </script>
+    </table>
+</div> <!-- browse -->
+
+<div id="insert" style="display: none;">
+    <form method="POST" id="addDoctor">
+        <legend><strong>Add Doctor</strong></legend>
+        <fieldset class="fields">
+            <label>First Name</label> <input type="text" name="firstName">
+            <label>Last Name</label> <input type="text" name="lastName">
+            <label>Email</label> <input type="email" name="email">
+            <label>Phone Number</label> <input type="text" name="phone">
+            <label>Specialty</label> <input type="text" name="specialty">
+            <label>License</label> <input type="text" name="license">
+            <label>Location</label> <input type="text" name="location">
+        </fieldset>
+        <input class="btn" type="submit" value="Add Doctor">
+        <input class="btn" type="button" value="Cancel" onclick="browseDoctors()">
+    </form>
+</div> <!-- insert -->
+
+<div id="update" style="display: none;">
+    <form method="POST" id="updateDoctor">
+        <legend><strong>Update Doctor</strong></legend>
+        <fieldset class="fields">
+            <input type="hidden" name="id" id="updateDoctorID">
+            <label>First Name</label> <input type="text" name="firstName">
+            <label>Last Name</label> <input type="text" name="lastName">
+            <label>Email</label> <input type="email" name="email">
+            <label>Phone Number</label> <input type="text" name="phone">
+            <label>Specialty</label> <input type="text" name="specialty">
+            <label>License</label> <input type="text" name="license">
+            <label>Location</label> <input type="text" name="location">
+        </fieldset>
+        <input class="btn" type="submit" value="Save Changes">
+        <input class="btn" type="button" value="Cancel" onclick="browseDoctors()">
+    </form>
+</div> <!-- update -->
+
+<div id="delete" style="display: none;">
+    <form method="POST" id="deleteDoctor">
+        <legend><strong>Delete Doctor</strong></legend>
+        <fieldset class="fields">
+            <p>Are you sure you wish to delete this doctor?</p>
+            <input type="hidden" name="id" id="deleteDoctorID">
+            <label><strong>First Name:</strong></label> <span id="deleteFirstName"></span><br>
+            <label><strong>Last Name:</strong></label> <span id="deleteLastName"></span><br>
+            <label><strong>Specialty:</strong></label> <span id="deleteSpecialty"></span><br>
+            <label><strong>Phone:</strong></label> <span id="deletePhone"></span><br>
+            <label><strong>Location:</strong></label> <span id="deleteLocation"></span><br>
+        </fieldset>
+        <input class="btn" type="submit" value="Confirm Delete">
+        <input class="btn" type="button" value="Cancel" onclick="browseDoctors()">
+    </form>
+</div> <!-- delete -->
+
+</body>
+</html>

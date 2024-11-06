@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pharmacies</title>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <script language="JavaScript">
+        const pharmacies = [
+            {   
+                pharmacyName: "Big Pharmacy",
+                pharmacyPhoneNumber: "123-555-7890",
+                pharmacyStreetAddress: "123 Chandler Blvd",
+                pharmacyCity: "Corvallis",
+                pharmacyState: "OR",
+                pharmacyZipCode: "97330"
+            },
+            {
+                pharmacyName: "CVS Pharmacy",
+                pharmacyPhoneNumber: "987-555-3210",
+                pharmacyStreetAddress: "789 Oak St",
+                pharmacyCity: "Corvallis",
+                pharmacyState: "OR",
+                pharmacyZipCode: "97330"
+            },
+            {
+                pharmacyName: "Medication Pharmacy",
+                pharmacyPhoneNumber: "480-555-4567",
+                pharmacyStreetAddress: "456 Vine Ave",
+                pharmacyCity: "Corvallis",
+                pharmacyState: "OR",
+                pharmacyZipCode: "97330"
+            }
+        ];
+
+        function showForm(action) {
+            document.getElementById('browse').style.display = action === 'browse' || action === 'all' ? 'block' : 'none';
+            document.getElementById('insert').style.display = action === 'insert' || action === 'all' ? 'block' : 'none';
+            document.getElementById('update').style.display = action === 'update' || action === 'all' ? 'block' : 'none';
+            document.getElementById('delete').style.display = action === 'delete' || action === 'all' ? 'block' : 'none';
+        }
+
+        function newPharmacy() { showForm('insert'); }
+
+        function updatePharmacy(index) {
+            const pharmacy = pharmacies[index];
+            populateForm(pharmacy, 'updatePharmacy');
+            showForm('update');
+        }
+
+        function deletePharmacy(index) {
+            const pharmacy = pharmacies[index];
+            document.getElementById('deletePharmacyName').textContent = pharmacy.pharmacyName;
+            document.getElementById('deletePhoneNumber').textContent = pharmacy.pharmacyPhoneNumber;
+            document.getElementById('deleteStreetAddress').textContent = pharmacy.pharmacyStreetAddress;
+            document.getElementById('deleteCity').textContent = pharmacy.pharmacyCity;
+            document.getElementById('deleteState').textContent = pharmacy.pharmacyState;
+            document.getElementById('deleteZipCode').textContent = pharmacy.pharmacyZipCode;
+            showForm('delete');
+        }
+
+        function populateForm(data, formId) {
+            Object.keys(data).forEach(key => {
+                const element = document.querySelector(`#${formId} [name="${key}"]`);
+                if (element) element.value = data[key];
+            });
+        }
+    </script>
+</head>
+
+<body onload="showForm('browse')">
+<h1>Pharmacies</h1>
+
+<nav>
+    <a href="index.html">Home</a>
+    <a href="patients.html">Patients</a>
+    <a href="doctors.html">Doctors</a>
+    <a href="appointments.html">Appointments</a>
+    <a href="medications.html">Medications</a>
+    <a href="pharmacies.html">Pharmacies</a>
+    <a href="patientrecords.html">Patient Records</a>>
+</nav>
+
+<div id="browse">
+    <p><a href="#" onclick="showForm('all')">Display all forms</a></p>
+    <table border="1" cellpadding="5">
+        <tr>
+            <th><a href="#" onclick="newPharmacy()">New</a></th>
+            <th></th>
+            <th>Pharmacy Name</th>
+            <th>Phone Number</th>
+            <th>Street Address</th>
+            <th>City</th>
+            <th>State</th>
+            <th>Zip Code</th>
+        </tr>
+        <script>
+            pharmacies.forEach((pharmacy, index) => {
+                document.write(`
+                    <tr>
+                        <td><a href="#" onclick="updatePharmacy(${index})">Edit</a></td>
+                        <td><a href="#" onclick="deletePharmacy(${index})">Delete</a></td>
+                        <td>${pharmacy.pharmacyName}</td>
+                        <td>${pharmacy.pharmacyPhoneNumber}</td>
+                        <td>${pharmacy.pharmacyStreetAddress}</td>
+                        <td>${pharmacy.pharmacyCity}</td>
+                        <td>${pharmacy.pharmacyState}</td>
+                        <td>${pharmacy.pharmacyZipCode}</td>
+                    </tr>
+                `);
+            });
+        </script>
+    </table>
+</div> <!-- browse -->
+
+<div id="insert" style="display: none;">
+    <form method="POST" id="addPharmacy">
+        <legend><strong>Add Pharmacy</strong></legend>
+        <fieldset class="fields">
+            <label>Pharmacy Name</label> <input type="text" name="pharmacyName">
+            <label>Phone Number</label> <input type="text" name="pharmacyPhoneNumber">
+            <label>Street Address</label> <input type="text" name="pharmacyStreetAddress">
+            <label>City</label> <input type="text" name="pharmacyCity">
+            <label>State</label> <input type="text" name="pharmacyState">
+            <label>Zip Code</label> <input type="text" name="pharmacyZipCode">
+        </fieldset>
+        <input class="btn" type="submit" value="Add Pharmacy">
+        <input class="btn" type="button" value="Cancel" onclick="showForm('browse')">
+    </form>
+</div> <!-- insert -->
+
+<div id="update" style="display: none;">
+    <form method="POST" id="updatePharmacy">
+        <legend><strong>Update Pharmacy</strong></legend>
+        <fieldset class="fields">
+            <label>Pharmacy Name</label> <input type="text" name="pharmacyName">
+            <label>Phone Number</label> <input type="text" name="pharmacyPhoneNumber">
+            <label>Street Address</label> <input type="text" name="pharmacyStreetAddress">
+            <label>City</label> <input type="text" name="pharmacyCity">
+            <label>State</label> <input type="text" name="pharmacyState">
+            <label>Zip Code</label> <input type="text" name="pharmacyZipCode">
+        </fieldset>
+        <input class="btn" type="submit" value="Save Changes">
+        <input class="btn" type="button" value="Cancel" onclick="showForm('browse')">
+    </form>
+</div> <!-- update -->
+
+<div id="delete" style="display: none;">
+    <form method="POST" id="deletePharmacy">
+        <legend><strong>Delete Pharmacy</strong></legend>
+        <fieldset class="fields">
+            <p>Are you sure you wish to delete this pharmacy?</p>
+            <label><strong>Pharmacy Name:</strong></label> <span id="deletePharmacyName"></span><br>
+            <label><strong>Phone Number:</strong></label> <span id="deletePhoneNumber"></span><br>
+            <label><strong>Street Address:</strong></label> <span id="deleteStreetAddress"></span><br>
+            <label><strong>City:</strong></label> <span id="deleteCity"></span><br>
+            <label><strong>State:</strong></label> <span id="deleteState"></span><br>
+            <label><strong>Zip Code:</strong></label> <span id="deleteZipCode"></span><br>
+        </fieldset>
+        <input class="btn" type="submit" value="Confirm Delete">
+        <input class="btn" type="button" value="Cancel" onclick="showForm('browse')">
+    </form>
+</div> <!-- delete -->
+
+</body>
+</html>
