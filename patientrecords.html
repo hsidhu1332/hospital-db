@@ -9,19 +9,19 @@
                 conditionName: "Hypotension",
                 diagnosisDate: "2024-01-15",
                 notes: "Patient advised to increase salt intake.",
-                patientID: "Sarah Estrella (1986-04-15)"
+                patientID: "1"
             },
             {
                 conditionName: "COPD",
                 diagnosisDate: "2024-06-10",
                 notes: "Inhaler prescribed.",
-                patientID: "Walter White (1992-11-22)"
+                patientID: "2"
             },
             {
                 conditionName: "Diabetes",
                 diagnosisDate: "2024-10-20",
                 notes: "Monitoring sugar levels.",
-                patientID: "Thomas Adams (1978-02-10)"
+                patientID: "3"
             }
         ];
 
@@ -99,6 +99,10 @@
     </table>
 </div> <!-- browse -->
 
+<script>
+    const patientID = ["1", "2", "3"];
+</script>
+
 <div id="insert" style="display: none;">
     <form method="POST" id="addRecord">
         <legend><strong>Add Patient Record</strong></legend>
@@ -106,7 +110,13 @@
             <label>Condition Name</label> <input type="text" name="conditionName">
             <label>Diagnosis Date</label> <input type="date" name="diagnosisDate">
             <label>Notes</label> <textarea name="notes"></textarea>
-            <label>Patient ID</label> <input type="text" name="patientID">
+            <select name="patientID">
+                <script>
+                    patientID.forEach(patientID => {
+                        document.write(`<option value="${patientID}">${patientID}</option>`);
+                    });
+                </script>
+            </select>
         </fieldset>
         <input class="btn" type="submit" value="Add Record">
         <input class="btn" type="button" value="Cancel" onclick="showForm('browse')">
@@ -120,7 +130,13 @@
             <label>Condition Name</label> <input type="text" name="conditionName">
             <label>Diagnosis Date</label> <input type="date" name="diagnosisDate">
             <label>Notes</label> <textarea name="notes"></textarea>
-            <label>Patient ID</label> <input type="text" name="patientID">
+            <select name="patientID">
+                <script>
+                    patientID.forEach(patientID => {
+                        document.write(`<option value="${patientID}">${patientID}</option>`);
+                    });
+                </script>
+            </select>
         </fieldset>
         <input class="btn" type="submit" value="Save Changes">
         <input class="btn" type="button" value="Cancel" onclick="showForm('browse')">

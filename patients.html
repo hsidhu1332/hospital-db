@@ -152,6 +152,10 @@
     </table>
 </div> <!-- browse -->
 
+<script>
+    const pharmacies = ["Big Pharmacy", "CVS Pharmacy", "Medication Pharmacy"];
+</script>
+
 <div id="insert" style="display: none;">
     <form method="POST" id="addPatient">
         <legend><strong>Add Patient</strong></legend>
@@ -166,7 +170,14 @@
             <label>ZIP Code</label> <input type="text" name="zip">
             <label>Insurance</label> <input type="text" name="insurance">
             <label>Policy Number</label> <input type="text" name="policyNumber">
-            <label>Pharmacy</label> <input type="text" name="pharmacy">
+            <label>Pharmacy</label> 
+            <select name="pharmacy">
+                <script>
+                    pharmacies.forEach(pharmacy => {
+                        document.write(`<option value="${pharmacy}">${pharmacy}</option>`);
+                    });
+                </script>
+            </select>
         </fieldset>
         <input class="btn" type="submit" value="Add Patient">
         <input class="btn" type="button" value="Cancel" onclick="browsePatients()">
@@ -188,12 +199,20 @@
             <label>ZIP Code</label> <input type="text" name="zip">
             <label>Insurance</label> <input type="text" name="insurance">
             <label>Policy Number</label> <input type="text" name="policyNumber">
-            <label>Pharmacy</label> <input type="text" name="pharmacy">
+            <label>Pharmacy</label> 
+            <select name="pharmacy">
+                <script>
+                    pharmacies.forEach(pharmacy => {
+                        document.write(`<option value="${pharmacy}">${pharmacy}</option>`);
+                    });
+                </script>
+            </select>
         </fieldset>
         <input class="btn" type="submit" value="Save Changes">
         <input class="btn" type="button" value="Cancel" onclick="browsePatients()">
     </form>
 </div> <!-- update -->
+
 
 <div id="delete" style="display: none;">
     <form method="POST" id="deletePatient">

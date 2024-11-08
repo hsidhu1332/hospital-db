@@ -54,10 +54,18 @@
 
         function populateForm(data, formId) {
             Object.keys(data).forEach(key => {
-                const element = document.querySelector(`#${formId} [name="${key}"]`);
-                if (element) element.value = data[key];
-            });
+            const element = document.querySelector(`#${formId} [name="${key}"]`);
+            if (element) {
+                if (element.tagName === 'SELECT') {
+                    // Set the selected value of the dropdown
+                    element.value = data[key];
+                } else {
+                    element.value = data[key];
+                }
+            }
+        });
         }
+
     </script>
 </head>
 
@@ -104,6 +112,11 @@
     </table>
 </div> <!-- browse -->
 
+<script>
+    const patients = ["Sarah Estrella", "Walter White", "Thomas Adams"];
+    const doctors = ["Doug Smith", "Johnny Francis", "Abe Washington"];
+</script>
+
 <div id="insert" style="display: none;">
     <form method="POST" id="addAppointment">
         <legend><strong>Add Appointment</strong></legend>
@@ -111,8 +124,20 @@
             <label>Date</label> <input type="date" name="appointmentDate">
             <label>Time</label> <input type="time" name="appointmentTime">
             <label>Reason</label> <input type="text" name="reason">
-            <label>Patient Name</label> <input type="text" name="patientName">
-            <label>Doctor Name</label> <input type="text" name="doctorName">
+            <select name="patientname">
+                <script>
+                    patients.forEach(patients => {
+                        document.write(`<option value="${patients}">${patients}</option>`);
+                    });
+                </script>
+            </select>
+            <select name="doctorname">
+                <script>
+                    doctors.forEach(doctors => {
+                        document.write(`<option value="${doctors}">${doctors}</option>`);
+                    });
+                </script>
+            </select>
         </fieldset>
         <input class="btn" type="submit" value="Add Appointment">
         <input class="btn" type="button" value="Cancel" onclick="showForm('browse')">
@@ -126,8 +151,20 @@
             <label>Date</label> <input type="date" name="appointmentDate">
             <label>Time</label> <input type="time" name="appointmentTime">
             <label>Reason</label> <input type="text" name="reason">
-            <label>Patient Name</label> <input type="text" name="patientName">
-            <label>Doctor Name</label> <input type="text" name="doctorName">
+            <select name="patientname">
+                <script>
+                    patients.forEach(patients => {
+                        document.write(`<option value="${patients}">${patients}</option>`);
+                    });
+                </script>
+            </select>
+            <select name="doctorname">
+                <script>
+                    doctors.forEach(doctors => {
+                        document.write(`<option value="${doctors}">${doctors}</option>`);
+                    });
+                </script>
+            </select>
         </fieldset>
         <input class="btn" type="submit" value="Save Changes">
         <input class="btn" type="button" value="Cancel" onclick="showForm('browse')">
