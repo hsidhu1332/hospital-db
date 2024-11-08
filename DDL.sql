@@ -47,8 +47,8 @@ CREATE OR REPLACE TABLE Medications (
     medication_id int AUTO_INCREMENT PRIMARY KEY,
     medication_name varchar(300) NOT NULL,
     dosage varchar(20) NOT NULL,
-    description varchar(300),
-    side_effect varchar(300)
+    description text,
+    side_effect text
 );
 
 -- Appointments table
@@ -56,7 +56,7 @@ CREATE OR REPLACE TABLE Appointments (
     appointment_id int AUTO_INCREMENT PRIMARY KEY,
     appointment_date date NOT NULL,
     appointment_time time NOT NULL,
-    reason varchar(300) NOT NULL,
+    reason text NOT NULL,
     status varchar(300) DEFAULT 'Scheduled',
     created_at timestamp DEFAULT CURRENT_TIMESTAMP,
     updated_at timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
