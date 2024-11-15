@@ -5,72 +5,85 @@
     <link href="style.css" rel="stylesheet" type="text/css" />
     <script language="JavaScript">
         const patients = [
-        {   
-            id: 1,
-            firstName: "Sarah",
-            lastName: "Estrella",
-            dob: "1986-04-15",
-            phone: "463-123-4679",
-            address: "456 Washington Ave",
-            city: "Corvallis",
-            state: "OR",
-            zip: "97330",
-            insurance: "BCBS",
-            policyNumber: "124541563",
-            pharmacy: "Big Pharmacy"
-        },
-        {
-            id: 2,
-            firstName: "Walter",
-            lastName: "White",
-            dob: "1992-11-22",
-            phone: "512-987-2153",
-            address: "789 Street Blvd",
-            city: "Corvallis",
-            state: "OR",
-            zip: "97330",
-            insurance: "Allstate",
-            policyNumber: "465415165",
-            pharmacy: "CVS Pharmacy"
-        },
-        {
-            id: 3,
-            firstName: "Thomas",
-            lastName: "Adams",
-            dob: "1978-02-10",
-            phone: "231-541-1221",
-            address: "321 Cedar Ct",
-            city: "Corvallis",
-            state: "OR",
-            zip: "97330",
-            insurance: "Medicare",
-            policyNumber: "456781523",
-            pharmacy: "Medication Pharmacy"
-        }
-    ];
+            {   
+                id: 1,
+                firstName: "Sarah",
+                lastName: "Estrella",
+                dob: "1986-04-15",
+                phone: "463-123-4679",
+                address: "456 Washington Ave",
+                city: "Corvallis",
+                state: "OR",
+                zip: "97330",
+                insurance: "BCBS",
+                policyNumber: "124541563",
+                pharmacy: "Big Pharmacy"
+            },
+            {
+                id: 2,
+                firstName: "Walter",
+                lastName: "White",
+                dob: "1992-11-22",
+                phone: "512-987-2153",
+                address: "789 Street Blvd",
+                city: "Corvallis",
+                state: "OR",
+                zip: "97330",
+                insurance: "Allstate",
+                policyNumber: "465415165",
+                pharmacy: "CVS Pharmacy"
+            },
+            {
+                id: 3,
+                firstName: "Thomas",
+                lastName: "Adams",
+                dob: "1978-02-10",
+                phone: "231-541-1221",
+                address: "321 Cedar Ct",
+                city: "Corvallis",
+                state: "OR",
+                zip: "97330",
+                insurance: "Medicare",
+                policyNumber: "456781523",
+                pharmacy: "Medication Pharmacy"
+            }
+        ];
 
+        const patientMedications = [
+            { patientID: 1, medicationID: 1 },
+            { patientID: 2, medicationID: 2 },
+            { patientID: 3, medicationID: 3 }
+        ];
 
-        function showform(dowhat) {
-            document.getElementById('browse').style.display = dowhat === 'browse' || dowhat === 'all' ? 'block' : 'none';
-            document.getElementById('insert').style.display = dowhat === 'insert' || dowhat === 'all' ? 'block' : 'none';
-            document.getElementById('update').style.display = dowhat === 'update' || dowhat === 'all' ? 'block' : 'none';
-            document.getElementById('delete').style.display = dowhat === 'delete' || dowhat === 'all' ? 'block' : 'none';
+        const patientDoctors = [
+            { patientID: 1, doctorID: 1 },
+            { patientID: 2, doctorID: 2 },
+            { patientID: 3, doctorID: 3 }
+        ];
+
+        function showForm(formId) {
+            document.querySelectorAll('.form-container').forEach(form => {
+                form.style.display = 'none';
+            });
+            document.getElementById(formId).style.display = 'block';
         }
 
         function populateForm(data, formId) {
             Object.keys(data).forEach(key => {
                 const element = document.querySelector(`#${formId} [name="${key}"]`);
-                if (element) element.value = data[key];
+                if (element) {
+                    element.value = data[key];
+                }
             });
         }
-
-        function newPatient() { showform('insert'); }
+        
+        function newPatient() { showForm('insertPatient'); }
 
         function updatePatient(patientId) {
             const patient = patients.find(p => p.id === patientId);
             if (patient) {
                 populateForm(patient, 'updatePatient');
-                showform('update');
+                showForm('updatePatient');
             }
         }
 
@@ -79,19 +92,49 @@
             if (patient) {
                 document.getElementById('deletePatientID').value = patientId;
 
-                // Populate the spans with patient data for delete confirmation
                 document.getElementById('deleteFirstName').textContent = patient.firstName;
                 document.getElementById('deleteLastName').textContent = patient.lastName;
                 document.getElementById('deletePhone').textContent = patient.phone;
                 document.getElementById('deleteCity').textContent = patient.city;
                 document.getElementById('deleteInsurance').textContent = patient.insurance;
 
-                showform('delete');
+                showForm('deletePatient');
             }
         }
 
-        function browsePatients() { showform('browse'); }
-        function showAll() { showform('all'); }
+        function newRecord() { showForm('insertRecord'); }
+
+        function updateRecord(index) {
+            const record = patientMedications[index];
+            populateForm(record, 'updateRecord');
+            showForm('updateRecord');
+        }
+
+        function deleteRecord(index) {
+            const record = patientMedications[index];
+            document.getElementById('deletePatientIDRecord').textContent = record.patientID;
+            document.getElementById('deleteMedicationIDRecord').textContent = record.medicationID;
+            showForm('deleteRecord');
+        }
+
+
+        function newDoctor() { showForm('insertDoctor'); }
+
+        function updateDoctor(index) {
+            const doctor = patientDoctors[index];
+            populateForm(doctor, 'updateDoctor');
+        showForm('updateDoctor');
+        }
+
+        function deleteDoctor(index) {
+            const doctor = patientDoctors[index];
+            document.getElementById('deletePatientIDDoctor').textContent = doctor.patientID;
+            document.getElementById('deleteDoctorIDDoctor').textContent = doctor.doctorID;
+            showForm('deleteDoctor');
+        }
+
+        function browsePatients() { showForm('browse'); }
+        function showAll() { showForm('browse'); }
     </script>
 </head>
 
@@ -108,8 +151,8 @@
     <a href="patientrecords.html">Patient Records</a>
 </nav>
 
-<div id="browse">
-    <p><a href="#" onclick="showAll()">Display all forms</a></p>
+<div id="browse" class="form-container">
+    <!-- <p><a href="#" onclick="showAll()">Display all forms</a></p> -->
     <table border="1" cellpadding="5">
         <tr>
             <th><a href="#" onclick="newPatient()">New</a></th>
@@ -150,13 +193,69 @@
             });
         </script>
     </table>
+
+    <h2>Patient-Medication Relationships</h2>
+    <table border="1" cellpadding="5">
+        <tr>
+            <th><a href="#" onclick="newRecord()">New</a></th>
+            <th></th>
+            <th>Patient ID</th>
+            <th>Medication ID</th>
+        </tr>
+        <script>
+            patientMedications.forEach((record, index) => {
+                document.write(`
+                    <tr>
+                        <td><a href="#" onclick="updateRecord(${index})">Edit</a></td>
+                        <td><a href="#" onclick="deleteRecord(${index})">Delete</a></td>
+                        <td>${record.patientID}</td>
+                        <td>${record.medicationID}</td>
+                    </tr>
+                `);
+            });
+        </script>
+    </table>
+
+    <h2>Patient-Doctor Relationships</h2>
+    <table border="1" cellpadding="5">
+        <tr>
+            <th><a href="#" onclick="newDoctor()">New</a></th>
+            <th></th>
+            <th>Patient ID</th>
+            <th>Doctor ID</th>
+        </tr>
+        <script>
+            patientDoctors.forEach((doctor, index) => {
+                document.write(`
+                    <tr>
+                        <td><a href="#" onclick="updateDoctor(${index})">Edit</a></td>
+                        <td><a href="#" onclick="deleteDoctor(${index})">Delete</a></td>
+                        <td>${doctor.patientID}</td>
+                        <td>${doctor.doctorID}</td>
+                    </tr>
+                `);
+            });
+        </script>
+    </table>
 </div> <!-- browse -->
 
 <script>
     const pharmacies = ["Big Pharmacy", "CVS Pharmacy", "Medication Pharmacy"];
 </script>
 
-<div id="insert" style="display: none;">
+<script>
+    const patientIDs = ["1", "2", "3"];
+</script>
+
+<script>
+    const medicationIDs = ["1", "2", "3"];
+</script>
+
+<script>
+    const doctorIDs = ["1", "2", "3"];
+</script>
+
+<div id="insertPatient" class="form-container" style="display: none;">
     <form method="POST" id="addPatient">
         <legend><strong>Add Patient</strong></legend>
         <fieldset class="fields">
@@ -182,10 +281,10 @@
         <input class="btn" type="submit" value="Add Patient">
         <input class="btn" type="button" value="Cancel" onclick="browsePatients()">
     </form>
-</div> <!-- insert -->
+</div>
 
-<div id="update" style="display: none;">
-    <form method="POST" id="updatePatient">
+<div id="updatePatient" class="form-container" style="display: none;">
+    <form method="POST" id="updatePatientForm">
         <legend><strong>Update Patient</strong></legend>
         <fieldset class="fields">
             <input type="hidden" name="id" id="updatePatientID">
@@ -211,25 +310,155 @@
         <input class="btn" type="submit" value="Save Changes">
         <input class="btn" type="button" value="Cancel" onclick="browsePatients()">
     </form>
-</div> <!-- update -->
+</div>
 
-
-<div id="delete" style="display: none;">
-    <form method="POST" id="deletePatient">
+<div id="deletePatient" class="form-container" style="display: none;">
+    <form method="POST" id="deletePatientForm">
         <legend><strong>Delete Patient</strong></legend>
         <fieldset class="fields">
-            <p>Are you sure you wish to delete this patient?</p>
-            <input type="hidden" name="id" id="deletePatientID">
-            <label><strong>First Name:</strong></label> <span id="deleteFirstName"></span><br>
-            <label><strong>Last Name:</strong></label> <span id="deleteLastName"></span><br>
-            <label><strong>Phone:</strong></label> <span id="deletePhone"></span><br>
-            <label><strong>City:</strong></label> <span id="deleteCity"></span><br>
-            <label><strong>Insurance:</strong></label> <span id="deleteInsurance"></span><br>
+            <label>Are you sure you want to delete this patient?</label>
+            <div id="deletePatientID">
+                <label><strong>First Name:</strong></label> <span id="deleteFirstName"></span><br>
+                <label><strong>Last Name:</strong></label> <span id="deleteLastName"></span><br>
+                <label><strong>Phone:</strong></label> <span id="deletePhone"></span><br>
+                <label><strong>City:</strong></label> <span id="deleteCity"></span><br>
+                <label><strong>Insurance:</strong></label> <span id="deleteInsurance"></span><br>
+            </div>
         </fieldset>
         <input class="btn" type="submit" value="Confirm Delete">
         <input class="btn" type="button" value="Cancel" onclick="browsePatients()">
     </form>
-</div> <!-- delete -->
+</div>
+
+<div id="insertRecord" class="form-container" style="display: none;">
+    <form method="POST" id="addRecordForm">
+        <legend><strong>Add Medication Record</strong></legend>
+        <fieldset class="fields">
+            <label>Patient ID:</label>
+            <select name="patientID">
+                <script>
+                    patientIDs.forEach(patientID => {
+                        document.write(`<option value="${patientID}">${patientID}</option>`);
+                    });
+                </script>
+            </select>
+            <label>Medication ID:</label>
+            <select name="medicationID">
+                <script>
+                    medicationIDs.forEach(medicationID => {
+                        document.write(`<option value="${medicationID}">${medicationID}</option>`);
+                    });
+                </script>
+            </select>
+        </fieldset>
+        <input class="btn" type="submit" value="Add Medication">
+        <input class="btn" type="button" value="Cancel" onclick="browsePatients()">
+    </form>
+</div>
+
+<div id="updateRecord" class="form-container" style="display: none;">
+    <form method="POST" id="updateRecordForm">
+        <legend><strong>Update Medication Record</strong></legend>
+        <fieldset class="fields">
+            <label>Patient ID:</label>
+            <select name="patientID">
+                <script>
+                    patientIDs.forEach(patientID => {
+                        document.write(`<option value="${patientID}">${patientID}</option>`);
+                    });
+                </script>
+            </select>
+            <label>Medication ID:</label>
+            <select name="medicationID">
+                <script>
+                    medicationIDs.forEach(medicationID => {
+                        document.write(`<option value="${medicationID}">${medicationID}</option>`);
+                    });
+                </script>
+            </select>
+        </fieldset>
+        <input class="btn" type="submit" value="Save Changes">
+        <input class="btn" type="button" value="Cancel" onclick="browsePatients()">
+    </form>
+</div>
+
+<div id="deleteRecord" class="form-container" style="display: none;">
+    <form method="POST" id="deleteRecordForm">
+        <legend><strong>Delete Medication Record</strong></legend>
+        <fieldset class="fields">
+            <label>Are you sure you want to delete this medication record?</label>
+            <p>Patient ID: <span id="deletePatientIDRecord"></span></p>
+            <p>Medication ID: <span id="deleteMedicationIDRecord"></span></p>
+        </fieldset>
+        <input class="btn" type="submit" value="Confirm Delete">
+        <input class="btn" type="button" value="Cancel" onclick="browsePatients()">
+    </form>
+</div>
+
+<div id="insertDoctor" class="form-container" style="display: none;">
+    <form method="POST" id="addDoctorForm">
+        <legend><strong>Add Doctor</strong></legend>
+        <fieldset class="fields">
+            <label>Patient ID:</label>
+            <select name="patientID">
+                <script>
+                    patientIDs.forEach(patientID => {
+                        document.write(`<option value="${patientID}">${patientID}</option>`);
+                    });
+                </script>
+            </select>
+            <label>Doctor ID:</label>
+            <select name="doctorID">
+                <script>
+                    doctorIDs.forEach(doctorID => {
+                        document.write(`<option value="${doctorID}">${doctorID}</option>`);
+                    });
+                </script>
+            </select>
+        </fieldset>
+        <input class="btn" type="submit" value="Add Doctor">
+        <input class="btn" type="button" value="Cancel" onclick="browsePatients()">
+    </form>
+</div>
+
+<div id="updateDoctor" class="form-container" style="display: none;">
+    <form method="POST" id="updateDoctorForm">
+        <legend><strong>Update Doctor</strong></legend>
+        <fieldset class="fields">
+            <label>Patient ID:</label>
+            <select name="patientID">
+                <script>
+                    patientIDs.forEach(patientID => {
+                        document.write(`<option value="${patientID}">${patientID}</option>`);
+                    });
+                </script>
+            </select>
+            <label>Doctor ID:</label>
+            <select name="doctorID">
+                <script>
+                    doctorIDs.forEach(doctorID => {
+                        document.write(`<option value="${doctorID}">${doctorID}</option>`);
+                    });
+                </script>
+            </select>
+        </fieldset>
+        <input class="btn" type="submit" value="Save Changes">
+        <input class="btn" type="button" value="Cancel" onclick="browsePatients()">
+    </form>
+</div>
+
+<div id="deleteDoctor" class="form-container" style="display: none;">
+    <form method="POST" id="deleteDoctorForm">
+        <legend><strong>Delete Doctor</strong></legend>
+        <fieldset class="fields">
+            <label>Are you sure you want to delete this doctor?</label>
+            <p>Patient ID: <span id="deletePatientIDDoctor"></span></p>
+            <p>Doctor ID: <span id="deleteDoctorIDDoctor"></span></p>
+        </fieldset>
+        <input class="btn" type="submit" value="Confirm Delete">
+        <input class="btn" type="button" value="Cancel" onclick="browsePatients()">
+    </form>
+</div>
 
 </body>
 </html>
