@@ -4,7 +4,7 @@ SELECT * FROM Patients;
 
 -- SELECT QUERY to populate Patients table view
 SELECT patient_id, patient_first_name, patient_last_name, patient_date_of_birth, patient_phone_number, patient_street_address, patient_city, patient_state, patient_zip_code, insurance_provider, insurance_policy_number, Pharmacies.pharmacy_name 
-FROM Patients INNER JOIN Pharmacies ON Patients.pharmacy_id = Pharmacies.pharmacy_id;
+FROM Patients LEFT JOIN Pharmacies ON Patients.pharmacy_id = Pharmacies.pharmacy_id;
 
 -- SELECT QUERY to get pharmacy name
 SELECT pharmacy_name FROM Pharmacies;

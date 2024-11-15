@@ -15,8 +15,8 @@ CREATE OR REPLACE TABLE Patients (
     patient_zip_code varchar(10) NOT NULL,
     insurance_provider varchar(100),
     insurance_policy_number varchar(50),
-    pharmacy_id int NOT NULL,
-    FOREIGN KEY (pharmacy_id) REFERENCES Pharmacies(pharmacy_id) ON DELETE RESTRICT
+    pharmacy_id int,
+    FOREIGN KEY (pharmacy_id) REFERENCES Pharmacies(pharmacy_id) ON DELETE SET NULL
 );
 
 -- Doctors table
