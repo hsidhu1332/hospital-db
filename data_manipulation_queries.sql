@@ -1,4 +1,4 @@
--- Patients
+-- Patients -----------------------------------------------------------------------------------------------------------------------------------------------
 -- SELECT QUERY
 SELECT * FROM Patients;
 
@@ -28,11 +28,11 @@ SET patient_first_name = :patient_first_name_input,
     pharmacy_id = :pharmacy_id_input
 WHERE patient_id = :patient_id_input;
 
-
 -- DELETE QUERY to delete a patient, using colon : to denote variables that will have data from backend
 DELETE FROM Patients WHERE patient_id = :patient_id_input;
 
--- Doctors
+
+-- Doctors ------------------------------------------------------------------------------------------------------------------------------------------------
 -- SELECT QUERY
 SELECT * FROM Doctors;
 
@@ -54,12 +54,13 @@ WHERE doctor_id = :doctor_id_input;
 -- DELETE QUERY to delete a doctor from the database, using colon : to denote variables that will have data from backend
 DELETE FROM Doctors WHERE doctor_id = :doctor_id_input;
 
--- Appointments
+
+-- Appointments -------------------------------------------------------------------------------------------------------------------------------------------
 --SELECT QUERY
 SELECT * FROM Appointments;
 
 -- SELECT QUERY to populate Appointments table view
-SELECT SELECT appointment_id, appointment_date, appointment_time, reason, CONCAT(Patients.patient_first_name, ' ', Patients.patient_last_name) AS patient_name, CONCAT(Doctors.doctor_first_name, ' ', Doctors.doctor_last_name) AS doctor_name 
+SELECT appointment_id, appointment_date, appointment_time, reason, CONCAT(Patients.patient_first_name, ' ', Patients.patient_last_name) AS patient_name, CONCAT(Doctors.doctor_first_name, ' ', Doctors.doctor_last_name) AS doctor_name 
 FROM Appointments
 INNER JOIN Patients ON Appointments.patient_id = Patients.patient_id
 INNER JOIN Doctors ON Appointments.doctor_id = Doctors.doctor_id;
@@ -87,7 +88,7 @@ WHERE appointment_id = :appointment_id_input;
 DELETE FROM Appointments WHERE appointment_id = :appointment_id_input;
 
 
--- Medications
+-- Medications --------------------------------------------------------------------------------------------------------------------------------------------
 -- SELECT QUERY
 SELECT * FROM Medications;
 
@@ -106,7 +107,8 @@ WHERE medication_id = :medication_id;
 -- DELETE QUERY to delete a medication from the database, using colon : to denote variables that will have data from backend
 DELETE FROM Medications WHERE medication_id = :medication_id;
 
--- Pharmacies
+
+-- Pharmacies ---------------------------------------------------------------------------------------------------------------------------------------------
 -- SELECT QUERY
 SELECT * FROM Pharmacies;
 
@@ -127,7 +129,8 @@ WHERE pharmacy_id = :pharmacy_id_input;
 -- DELETE QUERY to delete a pharmacy from the database, using colon : to denote variables that will have data from backend
 DELETE FROM Pharmacies WHERE pharmacy_id = :pharmacy_id_input;
 
--- Patient Records
+
+-- Patient Records ----------------------------------------------------------------------------------------------------------------------------------------
 -- SELECT QUERY
 SELECT * FROM PatientRecords;
 
@@ -148,3 +151,48 @@ WHERE patient_records_id = :patient_records_id_input;
 
 -- DELETE QUERY to delete a patient's record from the database, using colon : to denote variables that will have data from backend
 DELETE FROM PatientRecords WHERE patient_records_id = :patient_records_id_input;
+
+
+-- PatientMedication ------------------------------------------------------------------------------------------------------------------------------------------
+-- SELECT QUERY
+SELECT * FROM PatientMedication;
+
+-- INSERT QUERY to assign a medication to a patient
+INSERT INTO PatientMedication (patient_id, medication_id)
+VALUES (:patient_id_input, :medication_id_input);
+
+-- UPDATE QUERY to update a patient's specific medication
+UPDATE PatientMedication
+SET medication_id = :medication_id_input
+WHERE patient_id = :patient_id_input AND medication_id = :medication_id_input;
+
+-- UPDATE QUERY to update the patient associated with a specific medication
+UPDATE PatientMedication
+SET patient_id = :patient_id_input
+WHERE patient_id = :patient_id_input AND medication_id = :medication_id_input;
+
+-- DELETE QUERY to delete a specific patient-medication relationship
+DELETE FROM PatientMedication WHERE patient_id = :patient_id_input AND medication_id = medication_id_input;
+
+
+
+-- PatientDoctor ------------------------------------------------------------------------------------------------------------------------------------------
+-- SELECT QUERY
+SELECT * FROM PatientDoctor;
+
+-- INSERT QUERY to assign a doctor to a patient
+INSERT INTO PatientDoctor (patient_id, doctor_id)
+VALUES (:patient_id_input, :doctor_id_input);
+
+-- UPDATE QUERY to update a patient's specific doctor
+UPDATE PatientDoctor
+SET doctor_id = :doctor_id_input
+WHERE patient_id = :patient_id_input AND doctor_id = :doctor_id_input;
+
+-- UPDATE QUERY to update a doctor's specific patient
+UPDATE PatientDoctor
+SET patient_id = :patient_id_input
+WHERE patient_id = :patient_id_input AND doctor_id = :doctor_id_input;
+
+-- DELETE QUERY to delete a specific doctor-patient relationship
+DELETE FROM PatientDoctor WHERE patient_id = :patient_id_input AND doctor_id = doctor_id_input;
