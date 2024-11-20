@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Medications</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script language="JavaScript">
+        const medications = [
+            {   
+                medicationName: "Aspirin",
+                dosage: "100 mg",
+                description: "Pain reliever",
+                sideEffect: "Nausea"
+            },
+            {
+                medicationName: "Ibuprofen",
+                dosage: "200 mg",
+                description: "Anti-inflammatory",
+                sideEffect: "Dizziness"
+            },
+            {
+                medicationName: "Amoxicillin",
+                dosage: "300 mg",
+                description: "Antibiotic",
+                sideEffect: "Teeth Staining"
+            }
+        ];
+
+        function showForm(action) {
+            document.getElementById('browse').style.display = action === 'browse' || action === 'all' ? 'block' : 'none';
+            document.getElementById('insert').style.display = action === 'insert' || action === 'all' ? 'block' : 'none';
+            document.getElementById('update').style.display = action === 'update' || action === 'all' ? 'block' : 'none';
+            document.getElementById('delete').style.display = action === 'delete' || action === 'all' ? 'block' : 'none';
+        }
+
+        function newMedication() { showForm('insert'); }
+
+        function updateMedication(index) {
+            const medication = medications[index];
+            populateForm(medication, 'updateMedication');
+            showForm('update');
+        }
+
+        function deleteMedication(index) {
+            const medication = medications[index];
+            document.getElementById('deleteMedicationName').textContent = medication.medicationName;
+            document.getElementById('deleteDosage').textContent = medication.dosage;
+            document.getElementById('deleteDescription').textContent = medication.description;
+            document.getElementById('deleteSideEffect').textContent = medication.sideEffect;
+            showForm('delete');
+        }
+
+        function populateForm(data, formId) {
+            Object.keys(data).forEach(key => {
+                const element = document.querySelector(`#${formId} [name="${key}"]`);
+                if (element) element.value = data[key];
+            });
+        }
+    </script>
+</head>
+
+<body onload="showForm('browse')">
+<h1>Medications</h1>
+
+<nav>
+    <a href="{{ url_for('root') }}">Home</a>
+    <a href="{{ url_for('patients') }}">Patients</a>
+    <a href="{{ url_for('doctors') }}">Doctors</a>
+    <a href="{{ url_for('appointments') }}">Appointments</a>
+    <a href="{{ url_for('medications') }}">Medications</a>
+    <a href="{{ url_for('pharmacies') }}">Pharmacies</a>
+    <a href="{{ url_for('patientRecords') }}">Patient Records</a>
+</nav>
+
+<div id="browse">
+    <p><a href="#" onclick="showForm('all')">Display all forms</a></p>
+    <table border="1" cellpadding="5">
+        <tr>
+            <th><a href="#" onclick="newMedication()">New</a></th>
+            <th></th>
+            <th>Medication Name</th>
+            <th>Dosage</th>
+            <th>Description</th>
+            <th>Side Effect</th>
+        </tr>
+        <script>
+            medications.forEach((medication, index) => {
+                document.write(`
+                    <tr>
+                        <td><a href="#" onclick="updateMedication(${index})">Edit</a></td>
+                        <td><a href="#" onclick="deleteMedication(${index})">Delete</a></td>
+                        <td>${medication.medicationName}</td>
+                        <td>${medication.dosage}</td>
+                        <td>${medication.description}</td>
+                        <td>${medication.sideEffect}</td>
+                    </tr>
+                `);
+            });
+        </script>
+    </table>
+</div> <!-- browse -->
+
+<div id="insert" style="display: none;">
+    <form method="POST" id="addMedication">
+        <legend><strong>Add Medication</strong></legend>
+        <fieldset class="fields">
+            <label>Medication Name</label> <input type="text" name="medicationName">
+            <label>Dosage</label> <input type="text" name="dosage">
+            <label>Description</label> <input type="text" name="description">
+            <label>Side Effect</label> <input type="text" name="sideEffect">
+        </fieldset>
+        <input class="btn" type="submit" value="Add Medication">
+        <input class="btn" type="button" value="Cancel" onclick="showForm('browse')">
+    </form>
+</div> <!-- insert -->
+
+<div id="update" style="display: none;">
+    <form method="POST" id="updateMedication">
+        <legend><strong>Update Medication</strong></legend>
+        <fieldset class="fields">
+            <label>Medication Name</label> <input type="text" name="medicationName">
+            <label>Dosage</label> <input type="text" name="dosage">
+            <label>Description</label> <input type="text" name="description">
+            <label>Side Effect</label> <input type="text" name="sideEffect">
+        </fieldset>
+        <input class="btn" type="submit" value="Save Changes">
+        <input class="btn" type="button" value="Cancel" onclick="showForm('browse')">
+    </form>
+</div> <!-- update -->
+
+<div id="delete" style="display: none;">
+    <form method="POST" id="deleteMedication">
+        <legend><strong>Delete Medication</strong></legend>
+        <fieldset class="fields">
+            <p>Are you sure you wish to delete this medication?</p>
+            <label><strong>Medication Name:</strong></label> <span id="deleteMedicationName"></span><br>
+            <label><strong>Dosage:</strong></label> <span id="deleteDosage"></span><br>
+            <label><strong>Description:</strong></label> <span id="deleteDescription"></span><br>
+            <label><strong>Side Effect:</strong></label> <span id="deleteSideEffect"></span><br>
+        </fieldset>
+        <input class="btn" type="submit" value="Confirm Delete">
+        <input class="btn" type="button" value="Cancel" onclick="showForm('browse')">
+    </form>
+</div> <!-- delete -->
+
+</body>
+</html>

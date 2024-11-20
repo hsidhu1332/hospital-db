@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Patients</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+
+<h1>Patients</h1>
+
+<nav>
+    <a href="{{ url_for('root') }}">Home</a>
+    <a href="{{ url_for('patients') }}">Patients</a>
+    <a href="{{ url_for('doctors') }}">Doctors</a>
+    <a href="{{ url_for('appointments') }}">Appointments</a>
+    <a href="{{ url_for('medications') }}">Medications</a>
+    <a href="{{ url_for('pharmacies') }}">Pharmacies</a>
+    <a href="{{ url_for('patientRecords') }}">Patient Records</a>
+</nav>
+
+<div id="browse" class="form-container">
+    <table border="1" cellpadding="5">
+        <tr>
+            <th><a href="{{ url_for('add_patient') }}">New</a></th>
+            <th></th>
+            <th>Patient ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Date of Birth</th>
+            <th>Phone Number</th>
+            <th>Address</th>
+            <th>City</th>
+            <th>State</th>
+            <th>ZIP Code</th>
+            <th>Insurance</th>
+            <th>Policy Number</th>
+            <th>Pharmacy</th>
+        </tr>
+            {% for patient in patients %}
+                    <tr>
+                        <td><a href="edit_patient/{{patient.patient_id}}">Edit</a></td>
+                        <td><a href="delete_patient/{{patient.patient_id}}">Delete</a></td>
+                        <td>{{ patient.patient_id }}</td>
+                        <td>{{ patient.patient_first_name }}</td>
+                        <td>{{ patient.patient_last_name }}</td>
+                        <td>{{ patient.patient_date_of_birth }}</td>
+                        <td>{{ patient.patient_phone_number }}</td>
+                        <td>{{ patient.patient_street_address }}</td>
+                        <td>{{ patient.patient_city }}</td>
+                        <td>{{ patient.patient_state }}</td>
+                        <td>{{ patient.patient_zip_code }}</td>
+                        <td>{{ patient.insurance_provider }}</td>
+                        <td>{{ patient.insurance_policy_number }}</td>
+                        <td>{{ patient.pharmacy_id }}</td>
+        </tr>
+            {% endfor %}
+    </table>
+
+
+    {% if form_type == 'add' %}
+    <div id="insertPatient" class="form-container">
+        <form method="POST" id="addPatient" action="{{ url_for('add_patient') }}">
+            <legend><strong>Add Patient</strong></legend>
+            <fieldset class="fields">
+                <label>First Name</label> <input type="text" name="firstName">
+                <label>Last Name</label> <input type="text" name="lastName">
+                <label>Date of Birth</label> <input type="date" name="dob">
+                <label>Phone Number</label> <input type="text" name="phone">
+                <label>Address</label> <input type="text" name="address">
+                <label>City</label> <input type="text" name="city">
+                <label>State</label> <input type="text" name="state">
+                <label>ZIP Code</label> <input type="text" name="zip">
+                <label>Insurance</label> <input type="text" name="insurance">
+                <label>Policy Number</label> <input type="text" name="policyNumber">
+                <label>Pharmacy</label> 
+                <select name="pharmacy">
+                    <option value=""> </option>
+                    {% for pharmacy in pharmacies %}
+                    <option value="{{ pharmacy.pharmacy_id }}">{{ pharmacy.pharmacy_id }}</option>
+                    {% endfor %}
+                </select>
+            </fieldset>
+            <input class="btn" type="submit" value="Add Patient">
+            <a href="{{ url_for('patients') }}" class="btn">Cancel</a>
+        </form>
+    </div>
+    {% endif %}
+
+    {% if form_type == 'edit' %}
+    <div id="insertPatient" class="form-container">
+        <form method="POST" id="editPatient" action="{{ url_for('edit_patient', id=patient_edit.patient_id) }}">
+            <legend><strong>Edit Patient</strong></legend>
+            <fieldset class="fields">
+                <label>First Name</label>
+                <input type="text" name="firstName" value="{{ patient_edit.patient_first_name }}">
+
+                <label>Last Name</label>
+                <input type="text" name="lastName" value="{{ patient_edit.patient_last_name }}">
+
+                <label>Date of Birth</label>
+                <input type="date" name="dob" value="{{ patient_edit.patient_date_of_birth }}">
+
+                <label>Phone Number</label>
+                <input type="text" name="phone" value="{{ patient_edit.patient_phone_number }}">
+
+                <label>Address</label>
+                <input type="text" name="address" value="{{ patient_edit.patient_street_address }}">
+
+                <label>City</label>
+                <input type="text" name="city" value="{{ patient_edit.patient_city }}">
+
+                <label>State</label>
+                <input type="text" name="state" value="{{ patient_edit.patient_state }}">
+
+                <label>ZIP Code</label>
+                <input type="text" name="zip" value="{{ patient_edit.patient_zip_code }}">
+
+                <label>Insurance</label>
+                <input type="text" name="insurance" value="{{ patient_edit.insurance_provider }}">
+
+                <label>Policy Number</label>
+                <input type="text" name="policyNumber" value="{{ patient_edit.insurance_policy_number }}">
+
+                <label>Pharmacy</label>
+                    <select name="pharmacy">
+                        <option value="" {% if patient_edit.pharmacy_id == None %}selected{% endif %}></option>
+                        {% for pharmacy in pharmacies|sort(attribute='pharmacy_id') %}
+                            <option value="{{ pharmacy.pharmacy_id }}" 
+                                {% if pharmacy.pharmacy_id == patient_edit.pharmacy_id %}selected{% endif %}>
+                                {{ pharmacy.pharmacy_id }}
+                            </option>
+                        {% endfor %}
+                    </select>
+            </fieldset>
+            <input class="btn" type="submit" value="Update Patient">
+            <a href="{{ url_for('patients') }}" class="btn">Cancel</a>
+        </form>
+    </div>
+    {% endif %}
+
+    <h2>Patient-Medication Relationships</h2>
+    <table border="1" cellpadding="5">
+        <tr>
+            <th><a href="{{ url_for('add_patientmedication') }}">New</a></th>
+            <th></th>
+            <th>Patient Name</th>
+            <th>Medication Name</th>
+        </tr>
+        {% for patientMedication in patientMedications %}
+        <tr>
+            <td><a href="edit_patientmedication/{{patientMedication.patient_id}}{{patientMedication.medication_id}}">Edit</a></td>
+            <td><a href="delete_patientmedication/{{patientMedication.patient_id}}{{patientMedication.medication_id}}">Delete</a></td>
+            <td>{{patientMedication.patient_first_name}} {{patientMedication.patient_last_name}}</td>
+            <td>{{patientMedication.medication_name}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    {% if form_type == 'add_patientmedication' %}
+    <div id="insertPatientMedication" class="form-container">
+        <form method="POST" id="addPatientMedication" action="{{ url_for('add_patientmedication') }}">
+            <legend><strong>Add Medication for Patient</strong></legend>
+            <fieldset class="fields">
+                <select name="patient">
+                    {% for patient in patients %}
+                    <option value="{{ patient.patient_id }}">{{ patient.patient_first_name }} {{ patient.patient_last_name }}</option>
+                    {% endfor %}
+                </select>
+                <select name="medication">
+                    {% for medication in medications %}
+                    <option value="{{ medication.medication_id }}">{{ medication.medication_name }}</option>
+                    {% endfor %}
+                </select>
+            </fieldset>
+            <input class="btn" type="submit" value="Add Medication for Patient">
+            <a href="{{ url_for('patients') }}" class="btn">Cancel</a>
+        </form>
+    </div>
+    {% endif %}
+
+    {% if form_type == 'edit_patientmedication' %}
+    <div id="insertPatientMedication" class="form-container">
+        <form method="POST" id="editPatientMedication" action="{{ url_for('edit_patientmedication', patient_id=patientmedication_edit.patient_id, medication_id=patientmedication_edit.medication_id) }}">
+            <legend><strong>Edit Medication for Patient</strong></legend>
+            <fieldset class="fields">
+                <select name="patient">
+                    {% for patient in patients %}
+                        <option value="{{ patient.patient_id }}" 
+                            {% if patient.patient_id == patientmedication_edit.patient_id %} selected {% endif %}>
+                        {{ patient.patient_first_name }} {{ patient.patient_last_name }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <select name="medication">
+                    {% for medication in medications %}
+                        <option value="{{ medication.medication_id }}" 
+                            {% if medication.medication_id == patientmedication_edit.medication_id %} selected {% endif %}>
+                        {{ medication.medication_name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </fieldset>
+            <input class="btn" type="submit" value="Add Medication for Patient">
+            <a href="{{ url_for('patients') }}" class="btn">Cancel</a>
+        </form>
+    </div>
+    {% endif %}
+
+    <h2>Patient-Doctor Relationships</h2>
+    <table border="1" cellpadding="5">
+        <tr>
+            <th><a href="{{ url_for('add_patientdoctor') }}">New</a></th>
+            <th></th>
+            <th>Patient Name</th>
+            <th>Doctor Name</th>
+        </tr>
+        {% for patientDoctor in patientDoctors %}
+        <tr>
+            <td><a href="edit_patientdoctor/{{patientDoctor.patient_id}}{{patientDoctor.doctor_id}}">Edit</a></td>
+            <td><a href="delete_patientdoctor/{{patientDoctor.patient_id}}{{patientDoctor.doctor_id}}">Delete</a></td>
+            <td>{{patientDoctor.patient_first_name}} {{patientDoctor.patient_last_name}}</td>
+            <td>{{patientDoctor.doctor_first_name}} {{patientDoctor.doctor_last_name}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    {% if form_type == 'add_patientdoctor' %}
+    <div id="insertPatientDoctor" class="form-container">
+        <form method="POST" id="addPatientDoctor" action="{{ url_for('add_patientdoctor') }}">
+            <legend><strong>Add Doctor for Patient</strong></legend>
+            <fieldset class="fields">
+                <select name="patient">
+                    {% for patient in patients %}
+                    <option value="{{ patient.patient_id }}">{{ patient.patient_first_name }} {{ patient.patient_last_name }}</option>
+                    {% endfor %}
+                </select>
+                <select name="doctor">
+                    {% for doctor in doctors %}
+                    <option value="{{ doctor.doctor_id }}">{{ doctor.doctor_first_name }} {{ doctor.doctor_last_name }}</option>
+                    {% endfor %}
+                </select>
+            </fieldset>
+            <input class="btn" type="submit" value="Add Doctor for Patient">
+            <a href="{{ url_for('patients') }}" class="btn">Cancel</a>
+        </form>
+    </div>
+    {% endif %}
+
+    {% if form_type == 'edit_patientdoctor' %}
+    <div id="insertPatientDoctor" class="form-container">
+        <form method="POST" id="editPatientDoctor" action="{{ url_for('edit_patientdoctor', patient_id=patientdoctor_edit.patient_id, doctor_id=patientdoctor_edit.doctor_id) }}">
+            <legend><strong>Edit Doctor for Patient</strong></legend>
+            <fieldset class="fields">
+                <select name="patient">
+                    {% for patient in patients %}
+                        <option value="{{ patient.patient_id }}" 
+                            {% if patient.patient_id == patientdoctor_edit.patient_id %} selected {% endif %}>
+                        {{ patient.patient_first_name }} {{ patient.patient_last_name }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <select name="doctor">
+                    {% for doctor in doctors %}
+                        <option value="{{ doctor.doctor_id }}" 
+                            {% if doctor.doctor_id == patientdoctor_edit.doctor_id %} selected {% endif %}>
+                        {{ doctor.doctor_first_name }} {{ doctor.doctor_last_name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </fieldset>
+            <input class="btn" type="submit" value="Add Doctor for Patient">
+            <a href="{{ url_for('patients') }}" class="btn">Cancel</a>
+        </form>
+    </div>
+    {% endif %}
+</div> <!-- browse -->
+
+
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Patient Records</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script language="JavaScript">
+        const patientRecords = [
+            {   
+                conditionName: "Hypotension",
+                diagnosisDate: "2024-01-15",
+                notes: "Patient advised to increase salt intake.",
+                patientID: "1"
+            },
+            {
+                conditionName: "COPD",
+                diagnosisDate: "2024-06-10",
+                notes: "Inhaler prescribed.",
+                patientID: "2"
+            },
+            {
+                conditionName: "Diabetes",
+                diagnosisDate: "2024-10-20",
+                notes: "Monitoring sugar levels.",
+                patientID: "3"
+            }
+        ];
+
+        function showForm(action) {
+            document.getElementById('browse').style.display = action === 'browse' || action === 'all' ? 'block' : 'none';
+            document.getElementById('insert').style.display = action === 'insert' || action === 'all' ? 'block' : 'none';
+            document.getElementById('update').style.display = action === 'update' || action === 'all' ? 'block' : 'none';
+            document.getElementById('delete').style.display = action === 'delete' || action === 'all' ? 'block' : 'none';
+        }
+
+        function newRecord() { showForm('insert'); }
+
+        function updateRecord(index) {
+            const record = patientRecords[index];
+            populateForm(record, 'updateRecord');
+            showForm('update');
+        }
+
+        function deleteRecord(index) {
+            const record = patientRecords[index];
+            document.getElementById('deleteConditionName').textContent = record.conditionName;
+            document.getElementById('deleteDiagnosisDate').textContent = record.diagnosisDate;
+            document.getElementById('deleteNotes').textContent = record.notes;
+            document.getElementById('deletePatientID').textContent = record.patientID;
+            showForm('delete');
+        }
+
+        function populateForm(data, formId) {
+            Object.keys(data).forEach(key => {
+                const element = document.querySelector(`#${formId} [name="${key}"]`);
+                if (element) element.value = data[key];
+            });
+        }
+    </script>
+</head>
+
+<body onload="showForm('browse')">
+<h1>Patient Records</h1>
+
+<nav>
+    <a href="{{ url_for('root') }}">Home</a>
+    <a href="{{ url_for('patients') }}">Patients</a>
+    <a href="{{ url_for('doctors') }}">Doctors</a>
+    <a href="{{ url_for('appointments') }}">Appointments</a>
+    <a href="{{ url_for('medications') }}">Medications</a>
+    <a href="{{ url_for('pharmacies') }}">Pharmacies</a>
+    <a href="{{ url_for('patientRecords') }}">Patient Records</a>
+</nav>
+
+<div id="browse">
+    <p><a href="#" onclick="showForm('all')">Display all forms</a></p>
+    <table border="1" cellpadding="5">
+        <tr>
+            <th><a href="#" onclick="newRecord()">New</a></th>
+            <th></th>
+            <th>Condition Name</th>
+            <th>Diagnosis Date</th>
+            <th>Notes</th>
+            <th>Patient ID</th>
+        </tr>
+        <script>
+            patientRecords.forEach((record, index) => {
+                document.write(`
+                    <tr>
+                        <td><a href="#" onclick="updateRecord(${index})">Edit</a></td>
+                        <td><a href="#" onclick="deleteRecord(${index})">Delete</a></td>
+                        <td>${record.conditionName}</td>
+                        <td>${record.diagnosisDate}</td>
+                        <td>${record.notes}</td>
+                        <td>${record.patientID}</td>
+                    </tr>
+                `);
+            });
+        </script>
+    </table>
+</div> <!-- browse -->
+
+<script>
+    const patientID = ["1", "2", "3"];
+</script>
+
+<div id="insert" style="display: none;">
+    <form method="POST" id="addRecord">
+        <legend><strong>Add Patient Record</strong></legend>
+        <fieldset class="fields">
+            <label>Condition Name</label> <input type="text" name="conditionName">
+            <label>Diagnosis Date</label> <input type="date" name="diagnosisDate">
+            <label>Notes</label> <textarea name="notes"></textarea>
+            <select name="patientID">
+                <script>
+                    patientID.forEach(patientID => {
+                        document.write(`<option value="${patientID}">${patientID}</option>`);
+                    });
+                </script>
+            </select>
+        </fieldset>
+        <input class="btn" type="submit" value="Add Record">
+        <input class="btn" type="button" value="Cancel" onclick="showForm('browse')">
+    </form>
+</div> <!-- insert -->
+
+<div id="update" style="display: none;">
+    <form method="POST" id="updateRecord">
+        <legend><strong>Update Patient Record</strong></legend>
+        <fieldset class="fields">
+            <label>Condition Name</label> <input type="text" name="conditionName">
+            <label>Diagnosis Date</label> <input type="date" name="diagnosisDate">
+            <label>Notes</label> <textarea name="notes"></textarea>
+            <select name="patientID">
+                <script>
+                    patientID.forEach(patientID => {
+                        document.write(`<option value="${patientID}">${patientID}</option>`);
+                    });
+                </script>
+            </select>
+        </fieldset>
+        <input class="btn" type="submit" value="Save Changes">
+        <input class="btn" type="button" value="Cancel" onclick="showForm('browse')">
+    </form>
+</div> <!-- update -->
+
+<div id="delete" style="display: none;">
+    <form method="POST" id="deleteRecord">
+        <legend><strong>Delete Patient Record</strong></legend>
+        <fieldset class="fields">
+            <p>Are you sure you wish to delete this record?</p>
+            <label><strong>Condition Name:</strong></label> <span id="deleteConditionName"></span><br>
+            <label><strong>Diagnosis Date:</strong></label> <span id="deleteDiagnosisDate"></span><br>
+            <label><strong>Notes:</strong></label> <span id="deleteNotes"></span><br>
+            <label><strong>Patient ID:</strong></label> <span id="deletePatientID"></span><br>
+        </fieldset>
+        <input class="btn" type="submit" value="Confirm Delete">
+        <input class="btn" type="button" value="Cancel" onclick="showForm('browse')">
+    </form>
+</div> <!-- delete -->
+
+</body>
+</html>
