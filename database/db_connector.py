@@ -30,6 +30,8 @@ def execute_query(db_connection = None, query = None, query_params = ()):
 
     '''
 
+    db_connection = connect_to_database()
+
     if db_connection is None:
         print("No connection to the database found! Have you called connect_to_database() first?")
         return None
@@ -39,21 +41,29 @@ def execute_query(db_connection = None, query = None, query_params = ()):
         return None
 
     print("Executing %s with %s" % (query, query_params));
-    # Create a cursor to execute query. Why? Because apparently they optimize execution by retaining a reference according to PEP0249
-    cursor = db_connection.cursor(MySQLdb.cursors.DictCursor)
+    try:
+        # Create a cursor to execute query. Why? Because apparently they optimize execution by retaining a reference according to PEP0249
+        cursor = db_connection.cursor(MySQLdb.cursors.DictCursor)
 
-    '''
-    params = tuple()
-    #create a tuple of paramters to send with the query
-    for q in query_params:
+        '''
+        params = tuple()
+        #create a tuple of paramters to send with the query
+        for q in query_params:
         params = params + (q)
-    '''
-    #TODO: Sanitize the query before executing it!!!
-    cursor.execute(query, query_params)
-    # this will actually commit any changes to the database. without this no
-    # changes will be committed!
-    db_connection.commit();
-    return cursor
+        '''
+        #TODO: Sanitize the query before executing it!!!
+        cursor.execute(query, query_params)
+        # this will actually commit any changes to the database. without this no
+        # changes will be committed!
+        db_connection.commit();
+        return cursor
+    except MySQLdb.OperationalError as e:
+        if e.args[0] == 2006:  # Server has gone away
+            db_connection = connect_to_database()  # Reconnect to MySQL
+            cursor = db_connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute(query, query_params)
+            db_connection.commit();
+            return cursor
 
 if __name__ == '__main__':
     print("Executing a sample query on the database using the credentials from db_credentials.py")
