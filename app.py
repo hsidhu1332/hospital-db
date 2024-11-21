@@ -234,7 +234,7 @@ def edit_patientmedication(patient_id, medication_id):
         medications = get_medication_data()
         patientmedication = db.execute_query(db_connection=db_connection, query="SELECT * FROM PatientMedication WHERE patient_id = %s AND medication_id = %s", query_params=(patient_id, medication_id)).fetchone()
         return render_template('patients.j2', patientmedication_edit=patientmedication, patients=patients, patientMedications=patient_medications, patientDoctors=patient_doctors, medications=medications, form_type='edit_patientmedication')
-    # Adding an actual patient
+    # Edit an existing medication for a patient
     if request.method == 'POST':
         # Handle form submission
         patientmedication_patient_id = request.form['patient']
@@ -259,7 +259,7 @@ def add_patientdoctor():
         doctors = get_doctor_data()
 
         return render_template('patients.j2', patients=patients, patientMedications=patient_medications, patientDoctors=patient_doctors, doctors=doctors, form_type='add_patientdoctor')
-    # Adding an actual patient
+    # Adding a doctor for a patient
     if request.method == 'POST':
         # Handle form submission
         patientdoctor_patient_id = request.form['patient']

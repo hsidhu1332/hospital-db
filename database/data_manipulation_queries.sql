@@ -157,6 +157,20 @@ DELETE FROM PatientRecords WHERE patient_records_id = :patient_records_id_input;
 -- SELECT QUERY
 SELECT * FROM PatientMedication;
 
+-- SELECT QUERY to get patient and medication name from query
+SELECT 
+        pm.patient_id,
+        pm.medication_id,
+        m.medication_name,
+        p.patient_first_name,
+        p.patient_last_name
+    FROM 
+        PatientMedication pm
+    JOIN 
+        Medications m ON pm.medication_id = m.medication_id
+    JOIN 
+        Patients p ON pm.patient_id = p.patient_id;
+
 -- INSERT QUERY to assign a medication to a patient
 INSERT INTO PatientMedication (patient_id, medication_id)
 VALUES (:patient_id_input, :medication_id_input);
@@ -179,6 +193,21 @@ DELETE FROM PatientMedication WHERE patient_id = :patient_id_input AND medicatio
 -- PatientDoctor ------------------------------------------------------------------------------------------------------------------------------------------
 -- SELECT QUERY
 SELECT * FROM PatientDoctor;
+
+-- SELECT QUERY to get patient and doctor name from query
+SELECT 
+        pd.patient_id,
+        pd.doctor_id,
+        d.doctor_first_name,
+        d.doctor_last_name,
+        p.patient_first_name,
+        p.patient_last_name
+    FROM 
+        PatientDoctor pd
+    JOIN 
+        Doctors d ON pd.doctor_id = d.doctor_id
+    JOIN 
+        Patients p ON pd.patient_id = p.patient_id;
 
 -- INSERT QUERY to assign a doctor to a patient
 INSERT INTO PatientDoctor (patient_id, doctor_id)
