@@ -28,7 +28,6 @@
             <th>Reason</th>
             <th>Patient Name</th>
             <th>Doctor Name</th>
-            
         </tr>
             {% for appointment in appointments %}
                     <tr>
@@ -62,13 +61,11 @@
                 <label>Time</label> <input type="time" name="time">
                 <label>Reason</label> <input type="text" name="reason">
                 <select name="patient">
-                  <option value=""> </option>
                   {% for patient in patients %}
                   <option value="{{ patient.patient_id }}">{{ patient.patient_first_name }} {{ patient.patient_last_name }}</option>
                   {% endfor %}
                 </select>
                 <select name="doctor">
-                  <option value=""> </option>
                   {% for doctor in doctors %}
                   <option value="{{ doctor.doctor_id }}">{{ doctor.doctor_first_name }} {{ doctor.doctor_last_name }}</option>
                   {% endfor %}
@@ -122,8 +119,8 @@
                     {% endfor %}
                 </select>
             </fieldset>
-            <input class="btn" type="submit" value="Update Doctor">
-            <a href="{{ url_for('doctors') }}" class="btn">Cancel</a>
+            <input class="btn" type="submit" value="Update Appointment">
+            <a href="{{ url_for('appointments') }}" class="btn">Cancel</a>
         </form>
     </div>
     {% endif %}

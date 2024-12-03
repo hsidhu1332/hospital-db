@@ -99,8 +99,8 @@ def get_appointment_data():
     # Gets all the appointment data
     query_appointment = """
     SELECT a.appointment_id, a.appointment_date, a.appointment_time, a.reason,
-           p.first_name AS patient_first_name, p.last_name AS patient_last_name,
-           d.first_name AS doctor_first_name, d.last_name AS doctor_last_name
+           p.patient_first_name, p.patient_last_name,
+           d.doctor_first_name , d.doctor_last_name
     FROM Appointments a
     JOIN Patients p ON a.patient_id = p.patient_id
     JOIN Doctors d ON a.doctor_id = d.doctor_id
