@@ -6,7 +6,7 @@ import database.db_connector as db
 # Date: 11/19/2024
 
 # Configuration
-
+print('test')
 app = Flask(__name__)
 db_connection = None
 def get_patient_data():
