@@ -4,7 +4,6 @@ import database.db_connector as db
 
 # File based on app.py from https://github.com/osu-cs340-ecampus/flask-starter-app
 # Date: 11/19/2024
-# TEST
 
 # Configuration
 app = Flask(__name__)
