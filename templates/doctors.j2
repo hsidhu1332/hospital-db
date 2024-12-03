@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Doctors</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<!-- File based on j2 example from https://github.com/osu-cs340-ecampus/flask-starter-app -->
+
+<h1>Doctors</h1>
+
+<nav>
+    <a href="{{ url_for('root') }}">Home</a>
+    <a href="{{ url_for('patients') }}">Patients</a>
+    <a href="{{ url_for('doctors') }}">Doctors</a>
+    <a href="{{ url_for('appointments') }}">Appointments</a>
+    <a href="{{ url_for('medications') }}">Medications</a>
+    <a href="{{ url_for('pharmacies') }}">Pharmacies</a>
+    <a href="{{ url_for('patientRecords') }}">Patient Records</a>
+</nav>
+
+<div id="browse" class="form-container">
+    <table border="1" cellpadding="5">
+        <tr>
+            <th><a href="{{ url_for('add_doctor') }}">New</a></th>
+            <th></th>
+            <th>Doctor ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th>Specialty</th>
+            <th>License</th>
+            <th>Location</th>
+        </tr>
+            {% for doctor in doctors %}
+                    <tr>
+                        <td><a href="edit_doctor/{{doctor.doctor_id}}">Edit</a></td>
+                        <td><a href="delete_doctor/{{doctor.doctor_id}}">Delete</a></td>
+                        <td>{{ doctor.doctor_id }}</td>
+                        <td>{{ doctor.doctor_first_name}}</td>
+                        <td>{{ doctor.doctor_last_name }}</td>
+                        <td>{{ doctor.doctor_email }}</td>
+                        <td>{{ doctor.doctor_phone_number }}</td>
+                        <td>{{ doctor.specialty }}</td>
+                        <td>{{ doctor.license }}</td>
+                        <td>{{ doctor.location }}</td>
+        </tr>
+            {% endfor %}
+    </table>
+
+    {% if form_type == 'add' %}
+    <div id="insertDoctor" class="form-container">
+        <form method="POST" id="addDoctor" action="{{ url_for('add_doctor') }}">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                    <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            {% endwith %}
+            <legend><strong>Add Doctor</strong></legend>
+            <fieldset class="fields">
+                <label>First Name</label> <input type="text" name="firstName">
+                <label>Last Name</label> <input type="text" name="lastName">
+                <label>Email</label> <input type="text" name="email">
+                <label>Phone Number</label> <input type="text" name="phone">
+                <label>Specialty</label> <input type="text" name="specialty">
+                <label>License</label> <input type="text" name="license">
+                <label>Location</label> <input type="text" name="location">
+            </fieldset>
+            <input class="btn" type="submit" value="Add Doctor">
+            <a href="{{ url_for('doctors') }}" class="btn">Cancel</a>
+        </form>
+    </div>
+    {% endif %}
+
+
+    {% if form_type == 'edit' %}
+    <div id="insertDoctor" class="form-container">
+        <form method="POST" id="editDoctor" action="{{ url_for('edit_doctor', id=doctor_edit.doctor_id) }}">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                    <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            {% endwith %}
+            <legend><strong>Edit Doctor</strong></legend>
+            <fieldset class="fields">
+                <label>First Name</label>
+                <input type="text" name="firstName" value="{{ doctor_edit.doctor_first_name }}">
+
+                <label>Last Name</label>
+                <input type="text" name="lastName" value="{{ doctor_edit.doctor_last_name }}">
+
+                <label>Email</label>
+                <input type="text" name="email" value="{{ doctor_edit.doctor_email }}">
+
+                <label>Phone Number</label>
+                <input type="text" name="phone" value="{{ doctor_edit.doctor_phone_number }}">
+
+                <label>Specialty</label>
+                <input type="text" name="specialty" value="{{ doctor_edit.specialty }}">
+
+                <label>License</label>
+                <input type="text" name="license" value="{{ doctor_edit.license }}">
+
+                <label>Location</label>
+                <input type="text" name="location" value="{{ doctor_edit.location }}">
+
+            </fieldset>
+            <input class="btn" type="submit" value="Update Doctor">
+            <a href="{{ url_for('doctors') }}" class="btn">Cancel</a>
+        </form>
+    </div>
+    {% endif %}
+
+</div> <!-- browse -->
+
+
+</body>
+</html>

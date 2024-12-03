@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Medications</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<!-- File based on j2 example from https://github.com/osu-cs340-ecampus/flask-starter-app -->
+
+<h1>Doctors</h1>
+
+<nav>
+    <a href="{{ url_for('root') }}">Home</a>
+    <a href="{{ url_for('patients') }}">Patients</a>
+    <a href="{{ url_for('doctors') }}">Doctors</a>
+    <a href="{{ url_for('appointments') }}">Appointments</a>
+    <a href="{{ url_for('medications') }}">Medications</a>
+    <a href="{{ url_for('pharmacies') }}">Pharmacies</a>
+    <a href="{{ url_for('patientRecords') }}">Patient Records</a>
+</nav>
+
+<div id="browse" class="form-container">
+    <table border="1" cellpadding="5">
+        <tr>
+            <th><a href="{{ url_for('add_medication') }}">New</a></th>
+            <th></th>
+            <th>Medication Name</th>
+            <th>Dosage</th>
+            <th>Description</th>
+            <th>Side Effect</th>
+        </tr>
+            {% for medication in medications %}
+                    <tr>
+                        <td><a href="edit_medication/{{medication.medication_id}}">Edit</a></td>
+                        <td><a href="delete_medication/{{medication.medication_id}}">Delete</a></td>
+                        <td>{{ medication.medication_name }}</td>
+                        <td>{{ medication.dosage}}</td>
+                        <td>{{ medication.description }}</td>
+                        <td>{{ medication.side_effect }}</td>
+        </tr>
+            {% endfor %}
+    </table>
+
+    {% if form_type == 'add' %}
+    <div id="insertMedication" class="form-container">
+        <form method="POST" id="addMedication" action="{{ url_for('add_medication') }}">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                    <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            {% endwith %}
+            <legend><strong>Add Medication</strong></legend>
+            <fieldset class="fields">
+                <label>Medication Name</label> <input type="text" name="name">
+                <label>Dosage</label> <input type="text" name="dosage">
+                <label>Description</label> <input type="text" name="description">
+                <label>Side Effect</label> <input type="text" name="side_effect">
+            </fieldset>
+            <input class="btn" type="submit" value="Add Medication">
+            <a href="{{ url_for('medications') }}" class="btn">Cancel</a>
+        </form>
+    </div>
+    {% endif %}
+
+
+    {% if form_type == 'edit' %}
+    <div id="insertMedication" class="form-container">
+        <form method="POST" id="editMedication" action="{{ url_for('edit_medication', id=medication_edit.medication_id) }}">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                    <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            {% endwith %}
+            <legend><strong>Edit Medication</strong></legend>
+            <fieldset class="fields">
+                <label>Medication Name</label>
+                <input type="text" name="name" value="{{ medication_edit.medication_name }}">
+
+                <label>Dosage</label>
+                <input type="text" name="dosage" value="{{ medication_edit.dosage }}">
+
+                <label>Description</label>
+                <input type="text" name="description" value="{{ medication_edit.description }}">
+
+                <label>Side Effect</label>
+                <input type="text" name="side_effect" value="{{ medication_edit.side_effect }}">
+            </fieldset>
+            <input class="btn" type="submit" value="Update Medication">
+            <a href="{{ url_for('medications') }}" class="btn">Cancel</a>
+        </form>
+    </div>
+    {% endif %}
+
+</div> <!-- browse -->
+
+
+</body>
+</html>
