@@ -499,9 +499,11 @@ def add_appointment():
     # Get all the info
     if request.method == "GET":
         appointments = get_appointment_data()
+        patients, patient_medications, patient_doctors = get_patient_data()
+        doctors = get_doctor_data()
 
         # Basically the same return but with the added form_type parameter which is a condition in the j2 file to show the add form
-        return render_template('appointments.j2', appointments=appointments, form_type='add')
+        return render_template('appointments.j2', appointments=appointments, patients=patients, doctors=doctors, form_type='add')
     # Adding an actual appointment
     if request.method == 'POST':
         # Handle form submission
@@ -538,11 +540,13 @@ def edit_appointment(id):
     # Same as add gets the data and the appointment for the form
     if request.method == "GET":
         appointments = get_appointment_data()
+        patients, patient_medications, patient_doctors = get_patient_data()
+        doctors = get_doctor_data()
         # Get the info for the appointment we are editing to pre-fill in the form
         appointment = db.execute_query(db_connection=db_connection, query="SELECT * FROM Appointments WHERE appointment_id = %s", query_params=(id,)).fetchone()
 
         # Fill out the table (Notice now the form_type is edit so the edit form is showing)
-        return render_template('appointments.j2', appointment_edit=appointment, appointments=appointments, form_type='edit')
+        return render_template('appointments.j2', appointment_edit=appointment, appointments=appointments, patients=patients, doctors=doctors, form_type='edit')
     # Edit is the same as add basically just we check for the id in the query
     if request.method == 'POST':
         query = "SELECT * FROM Appointments WHERE appointment_id = %s"
