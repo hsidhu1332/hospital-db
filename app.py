@@ -494,7 +494,7 @@ def appointments():
     # Render all the tables (That form type makes sure the add and edit forms arent rendered)
     return render_template('appointments.j2', appointments=appointments, form_type='view')
 
-@app.route('/add_appointments', methods=['GET', 'POST'])
+@app.route('/add_appointment', methods=['GET', 'POST'])
 def add_appointment():
     # Get all the info
     if request.method == "GET":
@@ -510,8 +510,8 @@ def add_appointment():
         appointment_date = request.form['date']
         appointment_time = request.form['time'] 
         reason = request.form['reason']
-        patient_id = request.form['patient_id']
-        doctor_id = request.form['doctor_id']
+        patient_id = request.form['patient']
+        doctor_id = request.form['doctor']
         
         # Also the %s's are filled by the query params in the cursor variable
         if not appointment_date or not appointment_time or not reason or not patient_id or not doctor_id:
@@ -554,16 +554,16 @@ def edit_appointment(id):
         appointment_date = request.form['date']
         appointment_time = request.form['time'] 
         reason = request.form['reason']
-        patient_id = request.form['patient_id']
-        doctor_id = request.form['doctor_id']
+        patient_id = request.form['patient']
+        doctor_id = request.form['doctor']
         
         if not appointment_date or not appointment_time or not reason or not patient_id or not doctor_id:
             flash('All fields are required.')
-            return redirect(f'/add_appointment{id}')
+            return redirect(f'/edit_appointment{id}')
     
         if not is_valid_future_date(appointment_date):
             flash('The appointment date must be in the future and in a valid format (YYYY-MM-DD).')
-            return redirect(f'/add_appointment{id}')
+            return redirect(f'/edit_appointment{id}')
     
         query = """
             UPDATE Appointments
