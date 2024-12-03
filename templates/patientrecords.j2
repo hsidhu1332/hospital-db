@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Patient Records</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<!-- File based on j2 example from https://github.com/osu-cs340-ecampus/flask-starter-app -->
+
+<h1>Patient Records</h1>
+
+<nav>
+    <a href="{{ url_for('root') }}">Home</a>
+    <a href="{{ url_for('patients') }}">Patients</a>
+    <a href="{{ url_for('doctors') }}">Doctors</a>
+    <a href="{{ url_for('appointments') }}">Appointments</a>
+    <a href="{{ url_for('medications') }}">Medications</a>
+    <a href="{{ url_for('pharmacies') }}">Pharmacies</a>
+    <a href="{{ url_for('patientRecords') }}">Patient Records</a>
+</nav>
+
+<div id="browse" class="form-container">
+    <table border="1" cellpadding="5">
+        <tr>
+            <th><a href="{{ url_for('add_patientrecord') }}">New</a></th>
+            <th></th>
+            <th>Condition Name</th>
+            <th>Diagnosis Date</th>
+            <th>Notes</th>
+            <th>Patient Name</th>
+        </tr>
+            {% for patientrecord in patientrecords %}
+                    <tr>
+                        <td><a href="edit_patientrecord/{{patientrecord.patient_records_id}}">Edit</a></td>
+                        <td><a href="delete_patientrecord/{{patientrecord.patient_records_id}}">Delete</a></td>
+                        <td>{{ patientrecord.condition_name }}</td>
+                        <td>{{ patientrecord.diagnosis_date}}</td>
+                        <td>{{ patientrecord.notes }}</td>
+                        <td>{{patientrecord.patient_first_name}} {{patientrecord.patient_last_name}}</td>
+        </tr>
+            {% endfor %}
+    </table>
+
+
+    {% if form_type == 'add' %}
+    <div id="insertPatientrecord" class="form-container">
+        <form method="POST" id="addPatientrecord" action="{{ url_for('add_patientrecord') }}">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                    <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            {% endwith %}
+            <legend><strong>Add Patient Record</strong></legend>
+            <fieldset class="fields">
+                <label>Condition Name</label> <input type="text" name="Name">
+                <label>Diagnosis Date</label> <input type="date" name="diagnosis">
+                <label>Notes</label> <input type="text" name="notes">
+                <select name="patient_id">
+                    {% for patient in patients %}
+                    <option value="{{ patient.patient_id }}">{{ patient.patient_first_name }} {{ patient.patient_last_name }}</option>
+                    {% endfor %}
+                </select>
+            </fieldset>
+            <input class="btn" type="submit" value="Add Patient Record">
+            <a href="{{ url_for('patientRecords') }}" class="btn">Cancel</a>
+        </form>
+    </div>
+    {% endif %}
+
+    {% if form_type == 'edit' %}
+    <div id="insertPatientrecord" class="form-container">
+        <form method="POST" id="editPatientrecord" action="{{ url_for('edit_patientrecord', id=patientrecord_edit.patient_records_id) }}">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                    <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            {% endwith %}
+            <legend><strong>Edit Patient</strong></legend>
+            <fieldset class="fields">
+                <label>Condition Name</label>
+                <input type="text" name="Name" value="{{ patientrecord_edit.condition_name }}">
+
+                <label>Diagnosis Date</label>
+                <input type="date" name="diagnosis" value="{{ patientrecord_edit.diagnosis_date }}">
+
+                <label>Notes</label>
+                <input type="text" name="notes" value="{{ patientrecord_edit.notes }}">
+
+                <select name="patient_id">
+                    {% for patient in patients %}
+                        <option value="{{ patient.patient_id }}" 
+                            {% if patient.patient_id == patientrecord_edit.patient_id %} selected {% endif %}>
+                        {{ patient.patient_first_name }} {{ patient.patient_last_name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </fieldset>
+            <input class="btn" type="submit" value="Update Patient Record">
+            <a href="{{ url_for('patientRecords') }}" class="btn">Cancel</a>
+        </form>
+    </div>
+    {% endif %}
+
+</div> <!-- browse -->
+
+
+</body>
+</html>
