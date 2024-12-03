@@ -390,7 +390,7 @@ def doctors():
     # Render all the tables (That form type makes sure the add and edit forms arent rendered)
     return render_template('doctors.j2', doctors=doctors, form_type='view')
 
-@app.route('/add_doctors', methods=['GET', 'POST'])
+@app.route('/add_doctor', methods=['GET', 'POST'])
 def add_doctor():
     # Get all the info
     if request.method == "GET":
