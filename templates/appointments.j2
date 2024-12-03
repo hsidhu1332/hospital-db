@@ -33,7 +33,7 @@
             {% for appointment in appointments %}
                     <tr>
                         <td><a href="edit_appointment/{{appointment.appointment_id}}">Edit</a></td>
-                        <td><a href="delete_doctor/{{appointment.appointment_id}}">Delete</a></td>
+                        <td><a href="delete_appointment/{{appointment.appointment_id}}">Delete</a></td>
                         <td>{{ appointment.appointment_date }}</td>
                         <td>{{ appointment.appointment_time}}</td>
                         <td>{{ appointment.reason }}</td>
