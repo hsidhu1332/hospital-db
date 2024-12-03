@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pharmacies</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<!-- File based on j2 example from https://github.com/osu-cs340-ecampus/flask-starter-app -->
+
+<h1>Pharmacies</h1>
+
+<nav>
+    <a href="{{ url_for('root') }}">Home</a>
+    <a href="{{ url_for('patients') }}">Patients</a>
+    <a href="{{ url_for('doctors') }}">Doctors</a>
+    <a href="{{ url_for('appointments') }}">Appointments</a>
+    <a href="{{ url_for('medications') }}">Medications</a>
+    <a href="{{ url_for('pharmacies') }}">Pharmacies</a>
+    <a href="{{ url_for('patientRecords') }}">Patient Records</a>
+</nav>
+
+<div id="browse" class="form-container">
+    <table border="1" cellpadding="5">
+        <tr>
+            <th><a href="{{ url_for('add_pharmacy') }}">New</a></th>
+            <th></th>
+            <th>Pharmacy Name</th>
+            <th>Phone Number</th>
+            <th>Street Address</th>
+            <th>City</th>
+            <th>State</th>
+            <th>Zip Code</th>
+        </tr>
+            {% for pharmacy in pharmacies %}
+                    <tr>
+                        <td><a href="edit_pharmacy/{{pharmacy.pharmacy_id}}">Edit</a></td>
+                        <td><a href="delete_pharmacy/{{pharmacy.pharmacy_id}}">Delete</a></td>
+                        <td>{{ pharmacy.pharmacy_name }}</td>
+                        <td>{{ pharmacy.pharmacy_phone_number }}</td>
+                        <td>{{ pharmacy.pharmacy_street_address }}</td>
+                        <td>{{ pharmacy.pharmacy_city }}</td>
+                        <td>{{ pharmacy.pharmacy_state }}</td>
+                        <td>{{ pharmacy.pharmacy_zip_code }}</td>
+        </tr>
+            {% endfor %}
+    </table>
+
+
+    {% if form_type == 'add' %}
+    <div id="insertPharmacy" class="form-container">
+        <form method="POST" id="addPharmacy" action="{{ url_for('add_pharmacy') }}">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                    <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            {% endwith %}
+            <legend><strong>Add Pharmacy</strong></legend>
+            <fieldset class="fields">
+                <label>Name</label> <input type="text" name="Name">
+                <label>Phone Number</label> <input type="text" name="phone">
+                <label>Address</label> <input type="text" name="address">
+                <label>City</label> <input type="text" name="city">
+                <label>State</label> <input type="text" name="state">
+                <label>ZIP Code</label> <input type="text" name="zip">
+            </fieldset>
+            <input class="btn" type="submit" value="Add Pharmacy">
+            <a href="{{ url_for('pharmacies') }}" class="btn">Cancel</a>
+        </form>
+    </div>
+    {% endif %}
+
+    {% if form_type == 'edit' %}
+    <div id="insertPharmacy" class="form-container">
+        <form method="POST" id="editPharmacy" action="{{ url_for('edit_pharmacy', id=pharmacy_edit.pharmacy_id) }}">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                    <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            {% endwith %}
+            <legend><strong>Edit Pharmacy</strong></legend>
+            <fieldset class="fields">
+                <label>Name</label>
+                <input type="text" name="Name" value="{{ pharmacy_edit.pharmacy_name }}">
+
+                <label>Phone Number</label>
+                <input type="text" name="phone" value="{{ pharmacy_edit.pharmacy_phone_number }}">
+
+                <label>Address</label>
+                <input type="text" name="address" value="{{ pharmacy_edit.pharmacy_street_address }}">
+
+                <label>City</label>
+                <input type="text" name="city" value="{{ pharmacy_edit.pharmacy_city }}">
+
+                <label>State</label>
+                <input type="text" name="state" value="{{ pharmacy_edit.pharmacy_state }}">
+
+                <label>ZIP Code</label>
+                <input type="text" name="zip" value="{{ pharmacy_edit.pharmacy_zip_code }}">
+            </fieldset>
+            <input class="btn" type="submit" value="Update Pharmacy">
+            <a href="{{ url_for('pharmacies') }}" class="btn">Cancel</a>
+        </form>
+    </div>
+    {% endif %}
+</div> <!-- browse -->
+
+
+</body>
+</html>

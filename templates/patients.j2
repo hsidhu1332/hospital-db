@@ -60,6 +60,15 @@
     {% if form_type == 'add' %}
     <div id="insertPatient" class="form-container">
         <form method="POST" id="addPatient" action="{{ url_for('add_patient') }}">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                    <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            {% endwith %}
             <legend><strong>Add Patient</strong></legend>
             <fieldset class="fields">
                 <label>First Name</label> <input type="text" name="firstName">
@@ -89,6 +98,15 @@
     {% if form_type == 'edit' %}
     <div id="insertPatient" class="form-container">
         <form method="POST" id="editPatient" action="{{ url_for('edit_patient', id=patient_edit.patient_id) }}">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                    <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            {% endwith %}
             <legend><strong>Edit Patient</strong></legend>
             <fieldset class="fields">
                 <label>First Name</label>
@@ -200,7 +218,7 @@
                     {% endfor %}
                 </select>
             </fieldset>
-            <input class="btn" type="submit" value="Add Medication for Patient">
+            <input class="btn" type="submit" value="Update Medication for Patient">
             <a href="{{ url_for('patients') }}" class="btn">Cancel</a>
         </form>
     </div>
@@ -268,7 +286,7 @@
                     {% endfor %}
                 </select>
             </fieldset>
-            <input class="btn" type="submit" value="Add Doctor for Patient">
+            <input class="btn" type="submit" value="Update Doctor for Patient">
             <a href="{{ url_for('patients') }}" class="btn">Cancel</a>
         </form>
     </div>
