@@ -836,7 +836,7 @@ def edit_patientrecord(id):
     # Render the page with the form visible
 
 if __name__ == "__main__":
-    port = int(os.environ.get('PORT', 7699)) 
+    port = int(os.environ.get('PORT', 7698)) 
     #                                 ^^^^
     #              You can replace this number with any valid port
    
