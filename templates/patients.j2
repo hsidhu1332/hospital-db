@@ -34,7 +34,7 @@
             <th>ZIP Code</th>
             <th>Insurance</th>
             <th>Policy Number</th>
-            <th>Pharmacy</th>
+            <th>Pharmacy Name</th>
         </tr>
             {% for patient in patients %}
                     <tr>
@@ -51,7 +51,7 @@
                         <td>{{ patient.patient_zip_code }}</td>
                         <td>{{ patient.insurance_provider }}</td>
                         <td>{{ patient.insurance_policy_number }}</td>
-                        <td>{{ patient.pharmacy_id }}</td>
+                        <td>{{ patient.pharmacy_name }}</td>
         </tr>
             {% endfor %}
     </table>
@@ -85,7 +85,7 @@
                 <select name="pharmacy">
                     <option value=""> </option>
                     {% for pharmacy in pharmacies %}
-                    <option value="{{ pharmacy.pharmacy_id }}">{{ pharmacy.pharmacy_id }}</option>
+                    <option value="{{ pharmacy.pharmacy_id }}">{{ pharmacy.pharmacy_name }}</option>
                     {% endfor %}
                 </select>
             </fieldset>
@@ -145,7 +145,7 @@
                         {% for pharmacy in pharmacies|sort(attribute='pharmacy_id') %}
                             <option value="{{ pharmacy.pharmacy_id }}" 
                                 {% if pharmacy.pharmacy_id == patient_edit.pharmacy_id %}selected{% endif %}>
-                                {{ pharmacy.pharmacy_id }}
+                                {{ pharmacy.pharmacy_name }}
                             </option>
                         {% endfor %}
                     </select>

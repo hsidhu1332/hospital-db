@@ -31,7 +31,27 @@ def is_valid_future_date(date_str):
 
 def get_patient_data():
     # Gets all the data for the tables and makes them dictionaries
-    query = "SELECT * FROM Patients;"
+    query = """
+    SELECT 
+        p.patient_id,
+        p.patient_first_name,
+        p.patient_last_name,
+        p.patient_date_of_birth,
+        p.patient_phone_number,
+        p.patient_street_address,
+        p.patient_city,
+        p.patient_state,
+        p.patient_zip_code,
+        p.insurance_provider,
+        p.insurance_policy_number,
+        ph.pharmacy_name AS pharmacy_name
+    FROM 
+        Patients p
+    LEFT JOIN 
+        Pharmacies ph
+    ON 
+        p.pharmacy_id = ph.pharmacy_id;
+    """
     cursor = db.execute_query(db_connection=db_connection, query=query)
     patients = cursor.fetchall()
     # These are setup with join statements so that the name is used in the table rather than the id
