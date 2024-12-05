@@ -18,8 +18,8 @@ def is_valid_email(email):
     return bool(re.match(pattern, email))
 
 def is_valid_phone_number(phone):
-    # Regex to allow numbers with optional dashes
-    pattern = r"^\d{3}-?\d{3}-?\d{4}$"
+    # Regex to only allow numbers with dashes
+    pattern = r"^\d{3}-\d{3}-\d{4}$"
     return bool(re.match(pattern, phone))
 
 def is_valid_future_date(date_str):
@@ -173,7 +173,7 @@ def add_patient():
             return redirect('/add_patient')
     
         if not is_valid_phone_number(patient_phone):
-            flash('Phone number must be exactly 10 digits.')
+            flash('Phone number must be exactly 10 digits and in the format XXX-XXX-XXXX.')
             return redirect('/add_patient')
         
         if len(patient_state) > 2:
@@ -230,7 +230,7 @@ def edit_patient(id):
             return redirect(f'/edit_patient/{id}')
     
         if not is_valid_phone_number(patient_phone):
-            flash('Phone number must be exactly 10 digits.')
+            flash('Phone number must be exactly 10 digits and in the format XXX-XXX-XXXX.')
             return redirect(f'/edit_patient/{id}')
         
         if len(patient_state) > 2:
