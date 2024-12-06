@@ -166,8 +166,8 @@
         </tr>
         {% for patientMedication in patientMedications %}
         <tr>
-            <td><a href="edit_patientmedication/{{patientMedication.patient_id}}{{patientMedication.medication_id}}">Edit</a></td>
-            <td><a href="delete_patientmedication/{{patientMedication.patient_id}}{{patientMedication.medication_id}}">Delete</a></td>
+            <td><a href="{{ url_for('edit_patientmedication', patient_id=patientMedication.patient_id, medication_id=patientMedication.medication_id) }}">Edit</a></td>
+            <td><a href="{{ url_for('delete_patientmedication', patient_id=patientMedication.patient_id, medication_id=patientMedication.medication_id) }}">Delete</a></td>
             <td>{{patientMedication.patient_first_name}} {{patientMedication.patient_last_name}}</td>
             <td>{{patientMedication.medication_name}}</td>
         </tr>
@@ -252,8 +252,8 @@
         </tr>
         {% for patientDoctor in patientDoctors %}
         <tr>
-            <td><a href="edit_patientdoctor/{{patientDoctor.patient_id}}{{patientDoctor.doctor_id}}">Edit</a></td>
-            <td><a href="delete_patientdoctor/{{patientDoctor.patient_id}}{{patientDoctor.doctor_id}}">Delete</a></td>
+            <td><a href="{{ url_for('edit_patientdoctor', patient_id=patientDoctor.patient_id, doctor_id=patientDoctor.doctor_id) }}">Edit</a></td>
+            <td><a href="{{ url_for('delete_patientdoctor', patient_id=patientDoctor.patient_id, doctor_id=patientDoctor.doctor_id) }}">Delete</a></td>
             <td>{{patientDoctor.patient_first_name}} {{patientDoctor.patient_last_name}}</td>
             <td>{{patientDoctor.doctor_first_name}} {{patientDoctor.doctor_last_name}}</td>
         </tr>
