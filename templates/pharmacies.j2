@@ -32,8 +32,8 @@
         </tr>
             {% for pharmacy in pharmacies %}
                     <tr>
-                        <td><a href="edit_pharmacy/{{pharmacy.pharmacy_id}}">Edit</a></td>
-                        <td><a href="delete_pharmacy/{{pharmacy.pharmacy_id}}">Delete</a></td>
+                        <td><a href="{{ url_for('edit_pharmacy', id=pharmacy.pharmacy_id) }}">Edit</a></td>
+                        <td><a href="{{ url_for('delete_pharmacy', id=pharmacy.pharmacy_id) }}">Delete</a></td>
                         <td>{{ pharmacy.pharmacy_name }}</td>
                         <td>{{ pharmacy.pharmacy_phone_number }}</td>
                         <td>{{ pharmacy.pharmacy_street_address }}</td>

@@ -34,8 +34,8 @@
         </tr>
             {% for doctor in doctors %}
                     <tr>
-                        <td><a href="edit_doctor/{{doctor.doctor_id}}">Edit</a></td>
-                        <td><a href="delete_doctor/{{doctor.doctor_id}}">Delete</a></td>
+                        <td><a href="{{ url_for('edit_doctor', id=doctor.doctor_id) }}">Edit</a></td>
+                        <td><a href="{{ url_for('delete_doctor', id=doctor.doctor_id) }}">Delete</a></td>
                         <td>{{ doctor.doctor_id }}</td>
                         <td>{{ doctor.doctor_first_name}}</td>
                         <td>{{ doctor.doctor_last_name }}</td>

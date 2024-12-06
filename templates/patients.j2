@@ -38,8 +38,8 @@
         </tr>
             {% for patient in patients %}
                     <tr>
-                        <td><a href="edit_patient/{{patient.patient_id}}">Edit</a></td>
-                        <td><a href="delete_patient/{{patient.patient_id}}">Delete</a></td>
+                        <td><a href="{{ url_for('edit_patient', id=patient.patient_id) }}">Edit</a></td>
+                        <td><a href="{{ url_for('delete_patient', id=patient.patient_id) }}">Delete</a></td>
                         <td>{{ patient.patient_id }}</td>
                         <td>{{ patient.patient_first_name }}</td>
                         <td>{{ patient.patient_last_name }}</td>
@@ -178,6 +178,15 @@
     <div id="insertPatientMedication" class="form-container">
         <form method="POST" id="addPatientMedication" action="{{ url_for('add_patientmedication') }}">
             <legend><strong>Add Medication for Patient</strong></legend>
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                    <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            {% endwith %}
             <fieldset class="fields">
                 <select name="patient">
                     {% for patient in patients %}
@@ -200,6 +209,15 @@
     <div id="insertPatientMedication" class="form-container">
         <form method="POST" id="editPatientMedication" action="{{ url_for('edit_patientmedication', patient_id=patientmedication_edit.patient_id, medication_id=patientmedication_edit.medication_id) }}">
             <legend><strong>Edit Medication for Patient</strong></legend>
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                    <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            {% endwith %}
             <fieldset class="fields">
                 <select name="patient">
                     {% for patient in patients %}
@@ -246,6 +264,15 @@
     <div id="insertPatientDoctor" class="form-container">
         <form method="POST" id="addPatientDoctor" action="{{ url_for('add_patientdoctor') }}">
             <legend><strong>Add Doctor for Patient</strong></legend>
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                    <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            {% endwith %}
             <fieldset class="fields">
                 <select name="patient">
                     {% for patient in patients %}
@@ -268,6 +295,15 @@
     <div id="insertPatientDoctor" class="form-container">
         <form method="POST" id="editPatientDoctor" action="{{ url_for('edit_patientdoctor', patient_id=patientdoctor_edit.patient_id, doctor_id=patientdoctor_edit.doctor_id) }}">
             <legend><strong>Edit Doctor for Patient</strong></legend>
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                    <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            {% endwith %}
             <fieldset class="fields">
                 <select name="patient">
                     {% for patient in patients %}

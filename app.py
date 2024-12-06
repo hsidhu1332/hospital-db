@@ -308,6 +308,22 @@ def add_patientmedication():
         # Handle form submission
         patientmedication_patient_id = request.form['patient']
         patientmedication_medication_id = request.form['medication']
+
+        # Check if the new relationship already exists
+        query = """
+        SELECT * FROM PatientMedication
+        WHERE patient_id = %s AND medication_id = %s
+        """
+        existing_record = db.execute_query(
+            db_connection=db_connection,
+            query=query,
+            query_params=(patientmedication_patient_id, patientmedication_medication_id)
+        ).fetchone()
+        
+        if existing_record:
+            flash('This patient-medication relationship already exists.')
+            return redirect(f'/add_patientmedication')
+        
         query = "INSERT INTO PatientMedication (patient_id, medication_id) VALUES (%s, %s);"
         cursor = db.execute_query(db_connection=db_connection, query=query, query_params=(patientmedication_patient_id, patientmedication_medication_id))
         # Redirect back to patients when we are done (So the form is hidden)
@@ -336,6 +352,22 @@ def edit_patientmedication(patient_id, medication_id):
         # Handle form submission
         patientmedication_patient_id = request.form['patient']
         patientmedication_medication_id = request.form['medication']
+        
+        # Check if the new relationship already exists
+        query = """
+        SELECT * FROM PatientMedication
+        WHERE patient_id = %s AND medication_id = %s
+        """
+        existing_record = db.execute_query(
+            db_connection=db_connection,
+            query=query,
+            query_params=(patientmedication_patient_id, patientmedication_medication_id)
+        ).fetchone()
+        
+        if existing_record:
+            flash('This patient-medication relationship already exists.')
+            return redirect(f'/edit_patientmedication/{patient_id}{medication_id}')
+      
         query = """
         UPDATE PatientMedication
         SET patient_id = %s,
@@ -361,6 +393,22 @@ def add_patientdoctor():
         # Handle form submission
         patientdoctor_patient_id = request.form['patient']
         patientdoctor_doctor_id = request.form['doctor']
+
+        # Check if the new relationship already exists
+        query = """
+        SELECT * FROM PatientDoctor
+        WHERE patient_id = %s AND doctor_id = %s
+        """
+        existing_record = db.execute_query(
+            db_connection=db_connection,
+            query=query,
+            query_params=(patientdoctor_patient_id, patientdoctor_doctor_id)
+        ).fetchone()
+        
+        if existing_record:
+            flash('This patient-doctor relationship already exists.')
+            return redirect(f'/add_patientdoctor')
+
         query = "INSERT INTO PatientDoctor (patient_id, doctor_id) VALUES (%s, %s);"
         cursor = db.execute_query(db_connection=db_connection, query=query, query_params=(patientdoctor_patient_id, patientdoctor_doctor_id))
         # Redirect back to patients when we are done (So the form is hidden)
@@ -390,6 +438,22 @@ def edit_patientdoctor(patient_id, doctor_id):
         # Handle form submission
         patientdoctor_patient_id = request.form['patient']
         patientdoctor_doctor_id = request.form['doctor']
+        
+        # Check if the new relationship already exists
+        query = """
+        SELECT * FROM PatientDoctor
+        WHERE patient_id = %s AND doctor_id = %s
+        """
+        existing_record = db.execute_query(
+            db_connection=db_connection,
+            query=query,
+            query_params=(patientdoctor_patient_id, patientdoctor_doctor_id)
+        ).fetchone()
+        
+        if existing_record:
+            flash('This patient-doctor relationship already exists.')
+            return redirect(f'/edit_patientdoctor/{patient_id}{doctor_id}')
+        
         query = """
         UPDATE PatientDoctor
         SET patient_id = %s,
