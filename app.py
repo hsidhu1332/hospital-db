@@ -643,11 +643,11 @@ def edit_appointment(id):
         
         if not appointment_date or not appointment_time or not reason or not patient_id or not doctor_id:
             flash('All fields are required.')
-            return redirect(f'/edit_appointment{id}')
+            return redirect(f'/edit_appointment/{id}')
     
         if not is_valid_future_date(appointment_date):
             flash('The appointment date must be in the future and in a valid format (YYYY-MM-DD).')
-            return redirect(f'/edit_appointment{id}')
+            return redirect(f'/edit_appointment/{id}')
     
         query = """
             UPDATE Appointments
