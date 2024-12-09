@@ -126,10 +126,10 @@ VALUES
     ('2024-12-10', '15:30:00', 'Follow-up check', 
         (SELECT patient_id FROM Patients WHERE patient_first_name = 'Sarah' AND patient_last_name = 'Estrella' AND patient_date_of_birth = '1986-04-15'), 
         (SELECT doctor_id FROM Doctors WHERE doctor_first_name = 'Doug' AND doctor_last_name = 'Smith' AND license = 'DOC154627')),
-    ('2024-11-05', '10:00:00', 'Annual exam', 
+    ('2024-12-20', '10:00:00', 'Annual exam', 
         (SELECT patient_id FROM Patients WHERE patient_first_name = 'Walter' AND patient_last_name = 'White' AND patient_date_of_birth = '1992-11-22'), 
         (SELECT doctor_id FROM Doctors WHERE doctor_first_name = 'Johnny' AND doctor_last_name = 'Francis' AND license = 'DOC643254')),
-    ('2024-10-20', '15:00:00', 'Sports Physical', 
+    ('2024-12-21', '15:00:00', 'Sports Physical', 
         (SELECT patient_id FROM Patients WHERE patient_first_name = 'Thomas' AND patient_last_name = 'Adams' AND patient_date_of_birth = '1978-02-10'), 
         (SELECT doctor_id FROM Doctors WHERE doctor_first_name = 'Abe' AND doctor_last_name = 'Washington' AND license = 'DOC213675'));
 
