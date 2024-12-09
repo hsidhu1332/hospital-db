@@ -61,9 +61,9 @@ CREATE OR REPLACE TABLE Appointments (
     created_at timestamp DEFAULT CURRENT_TIMESTAMP,
     updated_at timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     patient_id int NOT NULL,
-    doctor_id int NOT NULL,
+    doctor_id int,
     FOREIGN KEY (patient_id) REFERENCES Patients(patient_id) ON DELETE RESTRICT,
-    FOREIGN KEY (doctor_id) REFERENCES Doctors(doctor_id) ON DELETE RESTRICT
+    FOREIGN KEY (doctor_id) REFERENCES Doctors(doctor_id) ON DELETE SET NULL
 );
 
 -- PatientRecords table
@@ -82,7 +82,7 @@ CREATE OR REPLACE TABLE PatientDoctor (
     doctor_id int NOT NULL,
     PRIMARY KEY (patient_id, doctor_id),
     FOREIGN KEY (patient_id) REFERENCES Patients(patient_id) ON DELETE RESTRICT,
-    FOREIGN KEY (doctor_id) REFERENCES Doctors(doctor_id) ON DELETE RESTRICT
+    FOREIGN KEY (doctor_id) REFERENCES Doctors(doctor_id) ON DELETE CASCADE
 );
 
 -- PatientMedication table

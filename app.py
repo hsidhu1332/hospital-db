@@ -505,6 +505,13 @@ def add_doctor():
         return redirect('/doctors')
     # Render the page with the form visible
 
+@app.route('/delete_doctor/<int:id>')
+def delete_doctor(id):
+    # Deletes the doctor then redirects back to doctors to update it
+    query = "DELETE FROM Doctors WHERE doctor_id = %s"
+    cursor = db.execute_query(db_connection=db_connection, query=query, query_params=(id,))
+    return redirect("/doctors")
+
 @app.route('/edit_doctor/<int:id>', methods=['GET', 'POST'])
 def edit_doctor(id):
     # Same as add gets the data and the doctor for the form
