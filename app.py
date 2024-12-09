@@ -211,6 +211,13 @@ def add_patient():
         return redirect('/patients')
     # Render the page with the form visible
 
+@app.route('/delete_patient/<int:id>')
+def delete_patient(id):
+    # Deletes the patient then redirects back to patients to update it
+    query = "DELETE FROM Patients WHERE patient_id = %s"
+    cursor = db.execute_query(db_connection=db_connection, query=query, query_params=(id,))
+    return redirect("/patients")
+
 @app.route('/edit_patient/<int:id>', methods=['GET', 'POST'])
 def edit_patient(id):
     # Same as add gets the data and the pharmacy for the form
@@ -691,6 +698,13 @@ def add_medication():
         return redirect('/medications')
     # Render the page with the form visible
 
+@app.route('/delete_medication/<int:id>')
+def delete_medication(id):
+    # Deletes the medication then redirects back to medications to update it
+    query = "DELETE FROM Medications WHERE medication_id = %s"
+    cursor = db.execute_query(db_connection=db_connection, query=query, query_params=(id,))
+    return redirect("/medications")
+
 @app.route('/edit_medication/<int:id>', methods=['GET', 'POST'])
 def edit_medication(id):
     # Same as add gets the data and the medication for the form
@@ -759,7 +773,7 @@ def add_pharmacy():
             return redirect('/add_pharmacy')
     
         if not is_valid_phone_number(pharmacy_phone):
-            flash('Phone number must be exactly 10 digits and in the format XXX-XXX-XXXX.')
+            flash('Phone number must be exactly 10 digits.')
             return redirect('/add_pharmacy')
         
         if len(pharmacy_state) > 2:
