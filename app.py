@@ -123,7 +123,7 @@ def get_appointment_data():
            d.doctor_first_name , d.doctor_last_name
     FROM Appointments a
     JOIN Patients p ON a.patient_id = p.patient_id
-    JOIN Doctors d ON a.doctor_id = d.doctor_id
+    LEFT JOIN Doctors d ON a.doctor_id = d.doctor_id
     """
     cursor_appointment = db.execute_query(db_connection=db_connection,query=query_appointment)
     appointments = cursor_appointment.fetchall()
@@ -598,7 +598,7 @@ def add_appointment():
         doctor_id = request.form['doctor']
         
         # Also the %s's are filled by the query params in the cursor variable
-        if not appointment_date or not appointment_time or not reason or not patient_id or not doctor_id:
+        if not appointment_date or not appointment_time or not reason or not patient_id:
             flash('All fields are required.')
             return redirect('/add_appointment')
     
@@ -641,26 +641,41 @@ def edit_appointment(id):
         patient_id = request.form['patient']
         doctor_id = request.form['doctor']
         
-        if not appointment_date or not appointment_time or not reason or not patient_id or not doctor_id:
+        if not appointment_date or not appointment_time or not reason or not patient_id:
             flash('All fields are required.')
             return redirect(f'/edit_appointment/{id}')
     
         if not is_valid_future_date(appointment_date):
             flash('The appointment date must be in the future and in a valid format (YYYY-MM-DD).')
             return redirect(f'/edit_appointment/{id}')
-    
-        query = """
-            UPDATE Appointments
-            SET appointment_date = %s,
-            appointment_time = %s, 
-            reason = %s, 
-            patient_id = %s, 
-            doctor_id = %s
-            WHERE appointment_id = %s;
-            """
-        # The %s's are filled in by the query_params at the end we use the parameter passed from the function for the WHERE statement
-        cursor = db.execute_query(db_connection=db_connection, query=query, query_params=(appointment_date, appointment_time, reason, patient_id, doctor_id, id))
-        return redirect('/appointments')
+
+        if doctor_id == '':
+            query = """
+                UPDATE Appointments
+                SET appointment_date = %s,
+                appointment_time = %s, 
+                reason = %s, 
+                patient_id = %s, 
+                doctor_id = null
+                WHERE appointment_id = %s;
+                """
+            # The %s's are filled in by the query_params at the end we use the parameter passed from the function for the WHERE statement
+            cursor = db.execute_query(db_connection=db_connection, query=query, query_params=(appointment_date, appointment_time, reason, patient_id, id))
+            return redirect('/appointments')
+        
+        else:
+            query = """
+                UPDATE Appointments
+                SET appointment_date = %s,
+                appointment_time = %s, 
+                reason = %s, 
+                patient_id = %s, 
+                doctor_id = %s
+                WHERE appointment_id = %s;
+                """
+            # The %s's are filled in by the query_params at the end we use the parameter passed from the function for the WHERE statement
+            cursor = db.execute_query(db_connection=db_connection, query=query, query_params=(appointment_date, appointment_time, reason, patient_id, doctor_id, id))
+            return redirect('/appointments')
 # Listener
 
 
