@@ -211,6 +211,13 @@ def add_patient():
         return redirect('/patients')
     # Render the page with the form visible
 
+@app.route('/delete_patient/<int:id>')
+def delete_patient(id):
+    # Deletes the patient then redirects back to patients to update it
+    query = "DELETE FROM Patients WHERE patient_id = %s"
+    cursor = db.execute_query(db_connection=db_connection, query=query, query_params=(id,))
+    return redirect("/patients")
+
 @app.route('/edit_patient/<int:id>', methods=['GET', 'POST'])
 def edit_patient(id):
     # Same as add gets the data and the pharmacy for the form
@@ -505,6 +512,13 @@ def add_doctor():
         return redirect('/doctors')
     # Render the page with the form visible
 
+@app.route('/delete_doctor/<int:id>')
+def delete_doctor(id):
+    # Deletes the doctor then redirects back to doctors to update it
+    query = "DELETE FROM Doctors WHERE doctor_id = %s"
+    cursor = db.execute_query(db_connection=db_connection, query=query, query_params=(id,))
+    return redirect("/doctors")
+
 @app.route('/edit_doctor/<int:id>', methods=['GET', 'POST'])
 def edit_doctor(id):
     # Same as add gets the data and the doctor for the form
@@ -683,6 +697,13 @@ def add_medication():
         # Redirect back to medications when we are done (So the form is hidden)
         return redirect('/medications')
     # Render the page with the form visible
+
+@app.route('/delete_medication/<int:id>')
+def delete_medication(id):
+    # Deletes the medication then redirects back to medications to update it
+    query = "DELETE FROM Medications WHERE medication_id = %s"
+    cursor = db.execute_query(db_connection=db_connection, query=query, query_params=(id,))
+    return redirect("/medications")
 
 @app.route('/edit_medication/<int:id>', methods=['GET', 'POST'])
 def edit_medication(id):
