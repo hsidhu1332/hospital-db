@@ -71,7 +71,6 @@
                 </select>
                 <select name="doctor">
                   {% for doctor in doctors %}
-                  <option value=""></option>
                   <option value="{{ doctor.doctor_id }}">{{ doctor.doctor_first_name }} {{ doctor.doctor_last_name }}</option>
                   {% endfor %}
                 </select>
