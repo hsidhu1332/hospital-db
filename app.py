@@ -6,6 +6,8 @@ import database.db_connector as db
 
 # File based on app.py from https://github.com/osu-cs340-ecampus/flask-starter-app
 # Date: 11/19/2024
+# CRUD functions adapted from source code, helper methods, as well as data validation functions are entirely our own work.
+# Queries to fetch name from ID for better understanding was also entirely our own work.
 
 # Configuration
 app = Flask(__name__)
