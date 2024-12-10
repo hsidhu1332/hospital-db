@@ -54,8 +54,7 @@ def get_patient_data():
     """
     cursor = db.execute_query(db_connection=db_connection, query=query)
     patients = cursor.fetchall()
-    # These are setup with join statements so that the name is used in the table rather than the id
-    # But interally the id is still used
+    
     query2 = query = """
     SELECT 
         pm.patient_id,
@@ -130,6 +129,7 @@ def get_appointment_data():
     return appointments
 
 def get_patientrecords_data():
+    # Gets all the PatientRecords data
     query = """
         SELECT 
         pr.patient_records_id,
@@ -150,7 +150,7 @@ def get_patientrecords_data():
 # Routes 
 @app.route('/')
 def root():
-    # Just the homepage :)
+    # Renders the homepage
     return render_template("index.html")
 
 @app.route('/patients')
@@ -158,7 +158,7 @@ def patients():
     # Get the dictionaries using the helper method
     patients, patient_medications, patient_doctors = get_patient_data()
 
-    # Render all the tables (That form type makes sure the add and edit forms arent rendered)
+    # Render all the tables while ensuring the forms are hidden
     return render_template('patients.j2', patients=patients, patientMedications=patient_medications, patientDoctors=patient_doctors, form_type='view')
     
 
@@ -170,7 +170,7 @@ def add_patient():
         patients, patient_medications, patient_doctors = get_patient_data()
         pharmacies = get_pharmacy_data()
 
-        # Basically the same return but with the added form_type parameter which is a condition in the j2 file to show the add form
+        
         return render_template('patients.j2', patients=patients, patientMedications=patient_medications, patientDoctors=patient_doctors, pharmacies=pharmacies, form_type='add')
     # Adding an actual patient
     if request.method == 'POST':
@@ -187,7 +187,7 @@ def add_patient():
         patient_policy_number = request.form['policyNumber']
         pharmacy_id = request.form['pharmacy']
         # Check if the pharmacy field was filled out
-        # Also the %s's are filled by the query params in the cursor variable
+        
         if not patient_first_name or not patient_last_name or not patient_dob or not patient_phone or not patient_address or not patient_city or not patient_state or not patient_zip or not patient_insurance or not patient_policy_number:
             flash('All fields except Pharmacy are required.')
             return redirect('/add_patient')
@@ -220,16 +220,15 @@ def delete_patient(id):
 
 @app.route('/edit_patient/<int:id>', methods=['GET', 'POST'])
 def edit_patient(id):
-    # Same as add gets the data and the pharmacy for the form
     if request.method == "GET":
         patients, patient_medications, patient_doctors = get_patient_data()
         pharmacies = get_pharmacy_data()
         # Get the info for the patient we are editing to pre-fill in the form
         patient = db.execute_query(db_connection=db_connection, query="SELECT * FROM Patients WHERE patient_id = %s", query_params=(id,)).fetchone()
 
-        # Fill out the table (Notice now the form_type is edit so the edit form is showing)
+        # Fill out the table and changes to the edit form
         return render_template('patients.j2', patient_edit=patient, patients=patients, patientMedications=patient_medications, patientDoctors=patient_doctors, pharmacies=pharmacies, form_type='edit')
-    # Edit is the same as add basically just we check for the id in the query
+    
     if request.method == 'POST':
         query = "SELECT * FROM Patients WHERE patient_id = %s"
         cursor = db.execute_query(db_connection=db_connection, query=query, query_params=(id,))
@@ -426,7 +425,7 @@ def delete_patientdoctor(patient_id, doctor_id):
 
 @app.route('/edit_patientdoctor/<int:patient_id><int:doctor_id>', methods=['GET', 'POST'])
 def edit_patientdoctor(patient_id, doctor_id):
-    # Get all the info plus doctor info for the add field
+    
     if request.method == "GET":
         patients, patient_medications, patient_doctors = get_patient_data()
         doctors = get_doctor_data()
@@ -493,7 +492,7 @@ def add_doctor():
         license = request.form['license']
         location = request.form['location']
 
-        # Also the %s's are filled by the query params in the cursor variable
+        
         if not doctor_first_name or not doctor_last_name or not doctor_email or not doctor_phone_number or not specialty or not license or not location:
             flash('All fields are required.')
             return redirect('/add_doctor')
@@ -527,9 +526,9 @@ def edit_doctor(id):
         # Get the info for the doctor we are editing to pre-fill in the form
         doctor = db.execute_query(db_connection=db_connection, query="SELECT * FROM Doctors WHERE doctor_id = %s", query_params=(id,)).fetchone()
 
-        # Fill out the table (Notice now the form_type is edit so the edit form is showing)
+        # Fill out the table with edit form visible
         return render_template('doctors.j2', doctor_edit=doctor, doctors=doctors, form_type='edit')
-    # Edit is the same as add basically just we check for the id in the query
+    # Gather form data
     if request.method == 'POST':
         query = "SELECT * FROM Doctors WHERE doctor_id = %s"
         cursor = db.execute_query(db_connection=db_connection, query=query, query_params=(id,))
@@ -567,9 +566,7 @@ def edit_doctor(id):
         # The %s's are filled in by the query_params at the end we use the parameter passed from the function for the WHERE statement
         cursor = db.execute_query(db_connection=db_connection, query=query, query_params=(doctor_first_name, doctor_last_name, doctor_email, doctor_phone_number, specialty, license, location, id))
         return redirect('/doctors')
-# Listener
 
-# Just so all the other pages render for now :)
 @app.route('/appointments')
 def appointments():
     # Get the dictionaries using the helper method
@@ -867,13 +864,13 @@ def patientRecords():
 
 @app.route('/add_patientrecord', methods=['GET', 'POST'])
 def add_patientrecord():
-    # Get all the info plus doctor info for the add field
+    # Get all the PatientRecord info for the add field
     if request.method == "GET":
         patients, patient_medications, patient_doctors = get_patient_data()
         patientrecords = get_patientrecords_data()
 
         return render_template('patientrecords.j2', patients=patients, patientrecords=patientrecords, form_type='add')
-    # Adding a doctor for a patient
+    # Adding a record for a patient
     if request.method == 'POST':
         # Handle form submission
         patientdrecord_condition_name = request.form['Name']
@@ -893,8 +890,8 @@ def add_patientrecord():
 
 @app.route('/delete_patientrecord/<int:id>')
 def delete_patientrecord(id):
-    # Deletes the patientdoctor entry then redirects back to patients to update it
-    # We take both ids from the route above to make sure we are deleting the right record
+    # Deletes the patientrecord entry then redirects back to patients to update it
+    # Since patientrecord has its own primary key, we can remove off that
     query = "DELETE FROM PatientRecords WHERE patient_records_id = %s"
     cursor = db.execute_query(db_connection=db_connection, query=query, query_params=(id,))
     return redirect("/patientrecords")
@@ -902,7 +899,7 @@ def delete_patientrecord(id):
 
 @app.route('/edit_patientrecord/<int:id>', methods=['GET', 'POST'])
 def edit_patientrecord(id):
-    # Get all the info plus doctor info for the add field
+    # Get all the info from patientrecord
     if request.method == "GET":
         patients, patient_medications, patient_doctors = get_patient_data()
         patientrecords = get_patientrecords_data()
@@ -930,7 +927,7 @@ def edit_patientrecord(id):
         
         """
         cursor = db.execute_query(db_connection=db_connection, query=query, query_params=(patientdrecord_condition_name, patientdrecord_diagnosis_date, patientdrecord_notes, patientdrecord_patient_id, id))
-        # Redirect back to patients when we are done (So the form is hidden)
+        # Redirect back to patientrecords when we are done (So the form is hidden)
         return redirect('/patientrecords')
     # Render the page with the form visible
 
